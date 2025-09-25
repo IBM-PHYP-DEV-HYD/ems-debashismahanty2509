@@ -35,8 +35,8 @@ class Employee : public EmployeeIF
     virtual void getCollege(void);
     virtual const uint8_t getCurrentLeaves(void);
     virtual size_t getEmployeeCount();
-    friend std::ostream& operator<<(std::ostream& osParam, const Employee& emp);
-    friend std::istream& operator>>(std::istream& isParam, Employee& emp);
+    friend std::ostream& operator<<(std::ostream& osParam, const Employee* emp);
+    friend std::istream& operator>>(std::istream& isParam, Employee* emp);
 
     //Getter functions
     const std::string_view getName(void) const;

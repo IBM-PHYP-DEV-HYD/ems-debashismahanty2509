@@ -13,8 +13,8 @@ class FullEmp : public Employee
     virtual ~FullEmp();
     size_t getEmployeeCount() override;
     const uint8_t getCurrentLeaves(void) override;
-    friend std::ostream& operator<<(std::ostream& osParam , const FullEmp* emp);
-    friend std::istream& operator>>(std::istream& isParam , FullEmp* emp);
+    friend std::ostream& operator<<(std::ostream& osParam , const FullEmp* empParam);
+    friend std::istream& operator>>(std::istream& isParam , FullEmp* empParam);
 
     private:
     size_t mSizeOfFullEmployee=0;
