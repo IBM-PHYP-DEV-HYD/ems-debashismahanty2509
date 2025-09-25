@@ -12,10 +12,14 @@ class Employee : public EmployeeIF
     char mGender; // M or F
     std::string mDOB; // DD-MM-YYYY
     static size_t mMemberNumbers;
+    //Random name generator arrays
+    std::string mFirstNames[10] = {"John", "Jane", "Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Hank"};
+    std::string mLastNames[10] = {"Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"};
 
     void setDOLBasedOnDOJ(bool isDOJSet, std::string setDOLBasedOnDOJ = "");
     void setIDBasedOnMemberNumberAndType(EmpType&);
     void setDOJ(void);
+    void setRandomDoj(void);
     void changeIdwithEmpType(void);
     void getTodayDate(std::string& dateParam);
 
@@ -27,8 +31,8 @@ class Employee : public EmployeeIF
     std::string mDOL; // DD-MM-YYYY
 
     //Constructors and Destructors
-    Employee();
-    Employee(EmpType empTypeParam=EmpType::NONE, EmpStatus empStatusParam=EmpStatus::ACTIVE);
+    Employee(EmpType empTypeParam);
+    Employee(EmpType empTypeParam=EmpType::NONE, EmpStatus empStatusParam);
     virtual ~Employee();
 
     //Member functions
@@ -46,11 +50,13 @@ class Employee : public EmployeeIF
     const std::string_view getID(void) const;
     const std::string_view getGender(void) const;
     const std::string_view getDOB(void) const;
+    const std::string_view getDOJ(void) const;
 
     //Setter functions
     void setEmployeeType(EmpType empTypeParam);
     void setEmployeeStatus(EmpStatus empStatusParam);
     void setDOL(const std::string& dolParam);
+
 
 
 };

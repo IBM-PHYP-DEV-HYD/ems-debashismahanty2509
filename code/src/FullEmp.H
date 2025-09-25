@@ -17,20 +17,29 @@ class FullEmp : public Employee
     friend std::istream& operator>>(std::istream& isParam , FullEmp* empParam);
 
     private:
-    size_t mSizeOfFullEmployee=0;
+    static size_t mSizeOfFullEmployee;
     uint8_t mCurrentLeaves=0;
-    uint8_t mMaxLeaves=18;
+    static uint8_t mMaxLeaves;
     
 };
-
-FullEmp::FullEmp() : Employee() , mSizeOfFullEmployee(0)
+size_t FullEmp::mSizeOfFullEmployee = 0;
+uint8_t FullEmp::mMaxLeaves = 22;
+FullEmp::FullEmp() : Employee(EmployeeIF::FULLTIME)
 {
+    mSizeOfFullEmployee++;
+    std::string_view sDOJ = getDOJ();
 
+    if(sDOJ != "NA" && sDOJ.length() == 10)
+    {
+        int sLeftMonth = 12 - std::stoi(std::string(sDOJ.substr(3,2)));
+        mCurrentLeaves = (sLeftMonth * mMaxLeaves) / 12;
+    }
+    
 }
 
 FullEmp::~FullEmp()
 {
-
+    mSizeOfFullEmployee--;
 }
 
 size_t FullEmp::getEmployeeCount()
@@ -43,12 +52,12 @@ const uint8_t FullEmp::getCurrentLeaves(void)
     return mCurrentLeaves;
 }
 
-std::ostream& operator<<(std::ostream& osParam , const FullEmp* emp)
+std::ostream& operator<<(std::ostream& osParam , const FullEmp* empParam)
 {
 
 }
 
-std::istream& operator>>(std::istream& isParam , FullEmp* emp)
+std::istream& operator>>(std::istream& isParam , FullEmp* empParam)
 {
 
 }

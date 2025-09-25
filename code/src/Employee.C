@@ -2,12 +2,13 @@
 
 size_t Employee::mMemberNumbers = 0;
 
-Employee::Employee() : mEmployeeType(EmpType::NONE), mEmployeeStatus(EmpStatus::ACTIVE), mGender('N'), mDOB("NA")
+Employee::Employee(EmpType empTypeParam) : mEmployeeStatus(EmpStatus::ACTIVE), mGender('N'), mDOB("NA")
 {
-    std::cout<< "Enter Name: ";
-    std::getline(std::cin>>std::ws,mName);
+    //Randomly generate employee type and Name
+    mEmployeeType = static_cast<EmpType>(rand() % 3 + 1);
+    mName = mFirstNames[rand() % 10] + " " + mLastNames[rand() % 10];
     setIDBasedOnMemberNumberAndType(mEmployeeType);
-    setDOJ();
+    setRandomDoj();
 }
 Employee::Employee(EmpType empTypeParam, EmpStatus empStatusParam) : mEmployeeType(empTypeParam), mEmployeeStatus(empStatusParam)
 {
@@ -213,4 +214,57 @@ void Employee::changeIdwithEmpType(void)
     {
         mID += "N";
     }
+}
+
+const std::string_view Employee::getDOJ(void) const
+{
+    return mDOJ;
+}
+
+void Employee::setRandomDoj(void)
+{
+    //Randomly DOJ generation based on Employee type
+    if(mEmployeeType == EmpType::FULLTIME)
+    {
+        mDOJ += std::to_string(rand() % 28 + 1);
+        mDOJ.length() == 1 ? mDOJ = "0" + mDOJ + "-" : mDOJ += "-";
+        mDOJ += std::to_string(rand() % 11 +1);
+        mDOJ.length() == 4 ? mDOJ = mDOJ.substr(0,3) + "0" + mDOJ.substr(3,1) + "-" : mDOJ += "-";
+        mDOJ += std::to_string(rand() % 10 + 2015);
+    }
+    else if(mEmployeeType == EmpType::INTERN)
+    {
+        //Based on current date - 6 months randomly generate
+        std::string sTodayDate;
+        getTodayDate(sTodayDate);
+        int sDay = rand() % 28;
+        int sMonth = std::stoi(sTodayDate.substr(3,2)) - rand() % 5;
+        int sYear = std::stoi(sTodayDate.substr(6,4));
+        if(sMonth <= 0)
+        {
+            sMonth += 12;
+            sYear -= 1;
+        }
+        mDOJ = sDay < 10 ? "0" + std::to_string(sDay) + "-" : std::to_string(sDay) + "-";
+        mDOJ += sMonth < 10 ? "0" + std::to_string(sMonth) + "-" : std::to_string(sMonth) + "-";
+        mDOJ += std::to_string(sYear);
+    }
+    else if(mEmployeeType == EmpType::CONTRACTUAL)
+    {
+        //Based on current date - 6 months randomly generate
+        std::string sTodayDate;
+        getTodayDate(sTodayDate);
+        int sDay = rand() % 28;
+        int sMonth = std::stoi(sTodayDate.substr(3,2)) - rand() % 11;
+        int sYear = std::stoi(sTodayDate.substr(6,4));
+        if(sMonth <= 0)
+        {
+            sMonth += 12;
+            sYear -= 1;
+        }
+        mDOJ = sDay < 10 ? "0" + std::to_string(sDay) + "-" : std::to_string(sDay) + "-";
+        mDOJ += sMonth < 10 ? "0" + std::to_string(sMonth) + "-" : std::to_string(sMonth) + "-";
+        mDOJ += std::to_string(sYear);
+    }
+    setDOLBasedOnDOJ(true);
 }
