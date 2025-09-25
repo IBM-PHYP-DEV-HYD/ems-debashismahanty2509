@@ -43,7 +43,7 @@ std::string_view ContEmp::getAgency(void) const
 
 std::ostream& operator<<(std::ostream& osParam , const ContEmp* emp)
 {
-
+    osParam << static_cast<const Employee*>(emp);
 }
 
 std::istream& operator>>(std::istream& isParam , ContEmp* emp)

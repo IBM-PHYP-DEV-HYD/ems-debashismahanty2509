@@ -18,18 +18,19 @@ class InternEmp : public Employee
     private:
     std::string mCollege;
     std::string mBranch;
-    size_t mSizeOfInternEmployee=0;
+    static size_t mSizeOfInternEmployee;
     
 };
+size_t InternEmp::mSizeOfInternEmployee = 0;
 
-InternEmp::InternEmp() : Employee() , mSizeOfInternEmployee(0)
+InternEmp::InternEmp() : Employee()
 {
-
+    mSizeOfInternEmployee++;
 }
 
 InternEmp::~InternEmp()
 {
-
+    mSizeOfInternEmployee--;
 }
 
 size_t InternEmp::getEmployeeCount()

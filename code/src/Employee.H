@@ -13,8 +13,11 @@ class Employee : public EmployeeIF
     std::string mDOB; // DD-MM-YYYY
     static size_t mMemberNumbers;
 
-    void setDOLBasedOnDOJ(void);
+    void setDOLBasedOnDOJ(bool isDOJSet, std::string setDOLBasedOnDOJ = "");
     void setIDBasedOnMemberNumberAndType(EmpType&);
+    void setDOJ(void);
+    void changeIdwithEmpType(void);
+    void getTodayDate(std::string& dateParam);
 
 
     public:
