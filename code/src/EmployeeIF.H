@@ -40,6 +40,11 @@ class EmployeeIF
         ECE,
         CSIT
     };
+    enum InputType
+    {
+        RANDOM = 0,
+        USERINPUT = 1
+    };
 
 
     virtual ~EmployeeIF() = default;

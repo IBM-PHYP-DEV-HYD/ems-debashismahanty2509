@@ -2,33 +2,19 @@
 
 size_t Employee::mMemberNumbers = 0;
 
-Employee::Employee(EmpType empTypeParam) : mEmployeeStatus(EmpStatus::ACTIVE), mGender('N'), mDOB("NA")
+Employee::Employee(EmpType empTypeParam) : mEmployeeType(empTypeParam), mEmployeeStatus(EmpStatus::ACTIVE), mGender('N'), mDOB("NA")
 {
     //Randomly generate employee type and Name
-    mEmployeeType = static_cast<EmpType>(rand() % 3 + 1);
     mName = mFirstNames[rand() % 10] + " " + mLastNames[rand() % 10];
     setIDBasedOnMemberNumberAndType(mEmployeeType);
     setRandomDoj();
 }
+
 Employee::Employee(EmpType empTypeParam, EmpStatus empStatusParam) : mEmployeeType(empTypeParam), mEmployeeStatus(empStatusParam)
 {
-    std::cout<< "Enter Name: ";
-    std::getline(std::cin>>std::ws,mName);
-
+    std::cin >> this;
     //id should be XYZ + mMemberNumbers + EmployeeType
     setIDBasedOnMemberNumberAndType(empTypeParam);
-    
-
-    std::cout<<"Enter the Gender (M/F): ";
-    std::cin>>mGender;
-    if(validCheck(std::cin) ==false)
-    {
-        mGender = 'N';
-    }
-
-    std::cout<<"Enter DOB (DD-MM-YYYY): ";
-    std::getline(std::cin>>std::ws,mDOB);
-
     setDOJ();
 }
 
@@ -221,6 +207,31 @@ const std::string_view Employee::getDOJ(void) const
     return mDOJ;
 }
 
+size_t Employee::getEmployeeCount()
+{
+    return mMemberNumbers;
+}
+
+std::string_view Employee::getAgency(void) const
+{
+    return "";
+}
+
+const std::string_view& Employee::getBranch(void)
+{
+    return "";
+}
+
+void Employee::getCollege(void)
+{
+    return;
+}
+
+const uint8_t Employee::getCurrentLeaves(void)
+{
+    return 0;
+}
+
 void Employee::setRandomDoj(void)
 {
     //Randomly DOJ generation based on Employee type
@@ -267,4 +278,64 @@ void Employee::setRandomDoj(void)
         mDOJ += std::to_string(sYear);
     }
     setDOLBasedOnDOJ(true);
+}
+
+std::ostream& operator<<(std::ostream& osParam, const Employee* emp)
+{
+    osParam << "Name: " << emp->mName << std::endl;
+    osParam << "ID: " << emp->mID << std::endl;
+    osParam << "Gender: " << emp->mGender << std::endl;
+    osParam << "DOB: " << emp->mDOB << std::endl;
+    osParam << "DOJ: " << emp->mDOJ << std::endl;
+    osParam << "DOL: " << emp->mDOL << std::endl;
+    osParam << "Employee Type: ";
+    switch(emp->mEmployeeType)
+    {
+        case EmployeeIF::EmpType::FULLTIME:
+            osParam << "Full Time" << std::endl;
+            break;
+        case EmployeeIF::EmpType::INTERN:
+            osParam << "Intern" << std::endl;
+            break;
+        case EmployeeIF::EmpType::CONTRACTUAL:
+            osParam << "Contractual" << std::endl;
+            break;
+        default:
+            osParam << "None" << std::endl;
+            break;
+    }
+    osParam << "Employee Status: ";
+    switch(emp->mEmployeeStatus)
+    {
+        case EmployeeIF::EmpStatus::ACTIVE:
+            osParam << "Active" << std::endl;
+            break;
+        case EmployeeIF::EmpStatus::INACTIVE:
+            osParam << "Inactive" << std::endl;
+            break;
+        case EmployeeIF::EmpStatus::RESIGNED:
+            osParam << "Resigned" << std::endl;
+            break;
+        default:
+            osParam << "None" << std::endl;
+            break;
+    }
+    return osParam;
+}
+
+std::istream& operator>>(std::istream& isParam, Employee* emp)
+{
+    std::cout<< "Enter Name: ";
+    std::getline(std::cin>>std::ws,emp->mName);
+
+    std::cout<<"Enter the Gender (M/F): ";
+    std::cin>>emp->mGender;
+    if(emp->validCheck(std::cin) ==false)
+    {
+        emp->mGender = 'N';
+    }
+    
+    std::cout<<"Enter DOB (DD-MM-YYYY): ";
+    std::getline(std::cin>>std::ws,emp->mDOB);
+    return isParam;
 }
