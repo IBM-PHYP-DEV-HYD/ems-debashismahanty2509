@@ -232,6 +232,21 @@ const uint8_t Employee::getCurrentLeaves(void)
     return 0;
 }
 
+void Employee::setLeavesApplied(const uint8_t& leavesParam)
+{
+    return;
+}
+
+void Employee::renewLeaveBalance(const uint8_t& carryForwardToNextYear)
+{
+    return;
+}
+
+void Employee::addLeavesToAll(const uint8_t& leavesParam)
+{
+    return;
+}
+
 void Employee::setRandomDoj(void)
 {
     //Randomly DOJ generation based on Employee type

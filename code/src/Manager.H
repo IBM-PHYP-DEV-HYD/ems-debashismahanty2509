@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Employee.H"
 //Declaration
-class Employee;
+
 template<class T> class EDLL;
 template<class T> class Node;
 
@@ -17,8 +17,8 @@ class Manager
     T mCompanyName;
     string* mUserName=nullptr;
     string* mPassword=nullptr;
-    EDLL<Employee*>* mEmployeeList=nullptr;
-    EDLL<Employee*>* mResignedEmployeeList=nullptr;
+    EDLL<EmployeeIF*>* mEmployeeList=nullptr;
+    EDLL<EmployeeIF*>* mResignedEmployeeList=nullptr;
 
     size_t mSizeOfFullTimeEmployee=0;
     size_t mSizeOfInternEmployee=0;
@@ -101,7 +101,7 @@ template<class T> void Manager<T>::addCredentials(std::string_view userNameParam
 
 template<class T> void Manager<T>::addEmployee(Employee::EmpType empTypeParam)
 {
-    Employee* sNewEmp = nullptr;
+    EmployeeIF* sNewEmp = nullptr;
     // Implementation to add employee based on empTypeParam
     switch (empTypeParam)
     {
@@ -118,11 +118,13 @@ template<class T> void Manager<T>::addEmployee(Employee::EmpType empTypeParam)
             sNewEmp = new ContEmp();
             break;    
         default:
+            std::cout << "Invalid Employee Type!" << std::endl;
+            return;
             break;
     }
     if(nullptr==mEmployeeList)
     {
-        mEmployeeList = new EDLL<Employee*>(1, sNewEmp);
+        mEmployeeList = new EDLL<EmployeeIF*>(1, sNewEmp);
         return;
     }
     mEmployeeList->pushBack(sNewEmp);
@@ -138,15 +140,146 @@ template<class T> void Manager<T>::removeEmployee(Employee::EmpType empTypeParam
     }
     for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
     {
-        if(mEmployeeList->operator[](sItr)->mID == empIDParam && mEmployeeList->operator[](sItr)->mEmployeeType == empTypeParam)
+        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
+        if(sEmp->mID == empIDParam && sEmp->mEmployeeType == empTypeParam)
         {
             if(nullptr==mResignedEmployeeList)
             {
-                mResignedEmployeeList = new EDLL<Employee*>(1, mEmployeeList->operator[](sItr));
+                mResignedEmployeeList = new EDLL<EmployeeIF*>(1, sEmp);
             }
-            mResignedEmployeeList->pushBack(mEmployeeList->operator[](sItr));
+            mResignedEmployeeList->pushBack(sEmp);
             mEmployeeList->remElementMiddle(sItr);
             break;
+        }
+    }
+}
+
+template<class T> void Manager<T>::displayEmployeeType(Employee::EmpType empTypeParam)
+{
+    // Implementation to display employees based on empTypeParam
+    if(nullptr==mEmployeeList || mEmployeeList->empty())
+    {
+        std::cout << "No employees to display!" << std::endl;
+        return;
+    }
+    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    {
+        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
+        if(sEmp->mEmployeeType == empTypeParam)
+        {
+            if(sEmp->mEmployeeType == Employee::EmpType::FULLTIME)
+            {
+                std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
+            }
+            else if(sEmp->mEmployeeType == Employee::EmpType::INTERN)
+            {
+                std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
+            }
+            else if(sEmp->mEmployeeType == Employee::EmpType::CONTRACTUAL)
+            {
+                std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+            }
+        }
+    }
+}
+
+template<class T> void Manager<T>::displayResignedEmployeeList(void)
+{
+    // Implementation to display resigned employees
+    if(nullptr==mResignedEmployeeList || mResignedEmployeeList->empty())
+    {
+        std::cout << "No resigned employees to display!" << std::endl;
+        return;
+    }
+    for(size_t sItr=0;sItr<mResignedEmployeeList->size();sItr++)
+    {
+        EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
+        if(sEmp->mEmployeeType == Employee::EmpType::FULLTIME)
+        {
+            std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
+        }
+        else if(sEmp->mEmployeeType == Employee::EmpType::INTERN)
+        {
+            std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
+        }
+        else if(sEmp->mEmployeeType == Employee::EmpType::CONTRACTUAL)
+        {
+            std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+        }
+    }
+}
+
+template<class T> void Manager<T>::displayAllEmployee(void)
+{
+    // Implementation to display all employees
+    if(nullptr==mEmployeeList || mEmployeeList->empty())
+    {
+        std::cout << "No employees to display!" << std::endl;
+        return;
+    }
+    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    {
+        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
+        if(sEmp->mEmployeeType == Employee::EmpType::FULLTIME)
+        {
+            std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
+        }
+        else if(sEmp->mEmployeeType == Employee::EmpType::INTERN)
+        {
+            std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
+        }
+        else if(sEmp->mEmployeeType == Employee::EmpType::CONTRACTUAL)
+        {
+            std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+        }
+    }
+}
+
+template<class T> void Manager<T>::searchWithID(const std::string& empIDParam)
+{
+    // Implementation to search employee based on empIDParam
+    if(nullptr==mEmployeeList || mEmployeeList->empty())
+    {
+        std::cout << "No employees to search!" << std::endl;
+        return;
+    }
+    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    {
+        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
+        if(sEmp->mID == empIDParam)
+        {
+            if(sEmp->mEmployeeType == Employee::EmpType::FULLTIME)
+            {
+                std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
+            }
+            else if(sEmp->mEmployeeType == Employee::EmpType::INTERN)
+            {
+                std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
+            }
+            else if(sEmp->mEmployeeType == Employee::EmpType::CONTRACTUAL)
+            {
+                std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+            }
+            return;
+        }
+    }
+    std::cout << "Employee with ID " << empIDParam << " not found!" << std::endl;
+}
+
+template<class T> void Manager<T>::addLeavesToAll(const uint8_t& leavesParam)
+{
+    FullEmp::mMaxLeaves += leavesParam;
+    if(nullptr==mEmployeeList || mEmployeeList->empty())
+    {
+        std::cout << "No employees to add leaves!" << std::endl;
+        return;
+    }
+    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    {
+        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
+        if(sEmp->mEmployeeType == Employee::EmpType::FULLTIME)
+        {
+            sEmp->addLeavesToAll(leavesParam);
         }
     }
 }

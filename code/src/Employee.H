@@ -32,7 +32,7 @@ class Employee : public EmployeeIF
 
     //Constructors and Destructors
     Employee(EmpType empTypeParam);
-    Employee(EmpType empTypeParam=EmpType::NONE, EmpStatus empStatusParam);
+    Employee(EmpType empTypeParam, EmpStatus empStatusParam);
     virtual ~Employee();
 
     //Member functions
@@ -56,6 +56,9 @@ class Employee : public EmployeeIF
     void setEmployeeType(EmpType empTypeParam);
     void setEmployeeStatus(EmpStatus empStatusParam);
     void setDOL(const std::string& dolParam);
+    virtual void setLeavesApplied(const uint8_t& leavesParam);
+    virtual void renewLeaveBalance(const uint8_t& carryForwardToNextYear);
+    virtual void addLeavesToAll(const uint8_t& leavesParam);
 
 
 
