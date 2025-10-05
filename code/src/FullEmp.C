@@ -78,6 +78,11 @@ void FullEmp::addLeavesToAll(const uint8_t& leavesParam)
     mCurrentLeaves += leavesParam;
 }
 
+void FullEmp::setMaxLeaves(const uint8_t& maxLeavesParam)
+{
+    mMaxLeaves = maxLeavesParam;
+}
+
 std::ostream& operator<<(std::ostream& osParam , const FullEmp* empParam)
 {
     osParam << static_cast<const Employee*>(empParam);

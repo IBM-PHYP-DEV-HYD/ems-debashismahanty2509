@@ -34,6 +34,34 @@ std::ostream& operator<<(std::ostream& osParam, const InternEmp* emp)
     return osParam;
 }
 
+const std::string_view& InternEmp::getBranch(void)
+{
+    return mBranch;
+}
+
+const std::string& InternEmp::getCollege(void)
+{
+    switch(mCollege)
+    {
+        case EmployeeIF::College::IitDelhi:
+            return "IitDelhi";
+        case EmployeeIF::College::IitMumbai:
+            return "IitMumbai";
+        case EmployeeIF::College::IitKanpur:
+            return "IitKanpur";
+        case EmployeeIF::College::IitHyderabad:
+            return "IitHyderabad";
+        case EmployeeIF::College::NitWarangal:
+            return "NitWarangal";
+        case EmployeeIF::College::NitTiruchi:
+            return "NitTiruchi";
+        case EmployeeIF::College::IiitHyderabad:
+            return "IiitHyderabad";
+        default:
+            return "NA";
+    }
+}
+
 std::istream& operator>>(std::istream& isParam, InternEmp* emp)
 {
     std::cout<< "Enter College: \n1. IitDelhi\n2. IitMumbai\n3. IitKanpur\n4. IitHyderabad\n5. NitWarangal\n6. NitTiruchi\n7. IiitHyderabad\n";

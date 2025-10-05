@@ -2,21 +2,25 @@
 #define _MANAGER_H_
 #include <iostream>
 #include "Employee.H"
+#include "FullEmp.H"
+#include "InternEmp.H"
+#include "ContEmp.H"
+#include "EDLL.H"
 //Declaration
 
 template<class T> class EDLL;
 template<class T> class Node;
 
 
-template<class T = std::string>
+template<class T>
 class Manager
 {
     public:
     virtual ~Manager();
 
     T mCompanyName;
-    string* mUserName=nullptr;
-    string* mPassword=nullptr;
+    std::string* mUserName=nullptr;
+    std::string* mPassword=nullptr;
     EDLL<EmployeeIF*>* mEmployeeList=nullptr;
     EDLL<EmployeeIF*>* mResignedEmployeeList=nullptr;
 
@@ -26,7 +30,7 @@ class Manager
 
     
 
-    static Manager* getInstance(std::string_view userNameParam, std::string_view PassParam, const T& companyNameParam);
+    static Manager* getInstance(const T& companyNameParam, std::string_view userNameParam = "", std::string_view PassParam = "");
     void addCredentials(std::string_view userNameParam, std::string_view PassParam);
     void addEmployee(Employee::EmpType empTypeParam);
     void removeEmployee(Employee::EmpType empTypeParam , const std::string& empIDParam);
@@ -38,9 +42,11 @@ class Manager
 
     private:
     Manager(T companyNameParam);
-    static Manager* ownPtr=nullptr;
+    static Manager<T>* ownPtr;
     
 };
+
+template<class T> Manager<T>* Manager<T>::ownPtr = nullptr;
 
 template<class T> Manager<T>::Manager(T companyNameParam) : mCompanyName(companyNameParam), 
 mEmployeeList(nullptr), mResignedEmployeeList(nullptr), mSizeOfFullTimeEmployee(0), 
@@ -63,7 +69,7 @@ template<class T> Manager<T>::~Manager()
     }
 }
 
-template<class T> Manager<T>* Manager<T>::getInstance(std::string_view userNameParam, std::string_view PassParam, const T& companyNameParam)
+template<class T> Manager<T>* Manager<T>::getInstance(const T& companyNameParam, std::string_view userNameParam, std::string_view PassParam)
 {
     if(nullptr != ownPtr && nullptr != ownPtr->mUserName && nullptr != ownPtr->mPassword)
     {
@@ -79,9 +85,24 @@ template<class T> Manager<T>* Manager<T>::getInstance(std::string_view userNameP
     }
     if(nullptr==ownPtr)
     {
+        bool sFlag = false;
         ownPtr = new Manager(companyNameParam);
+        if(userNameParam != "" && PassParam != "")
+        {
+            sFlag = true;
+            std::cout << "Adding Credentials" << std::endl;
+            ownPtr->addCredentials(userNameParam, PassParam);
+        }
+        if(sFlag == false)
+        {
+            std::cout << "Please call add credentials to get the instance next time." << std::endl;
+        }
+        else
+        {
+            std::cout<< "Manager instance created for company: " << companyNameParam << " To get the instance again, please provide credentials." << std::endl;
+        }
     }
-    return ownPtr;
+    return nullptr;
 }
 
 template<class T> void Manager<T>::addCredentials(std::string_view userNameParam, std::string_view PassParam)
@@ -141,7 +162,7 @@ template<class T> void Manager<T>::removeEmployee(Employee::EmpType empTypeParam
     for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        if(sEmp->mID == empIDParam && sEmp->mEmployeeType == empTypeParam)
+        if(sEmp->getID() == empIDParam && sEmp->getEmployeeType() == empTypeParam)
         {
             if(nullptr==mResignedEmployeeList)
             {
@@ -165,17 +186,18 @@ template<class T> void Manager<T>::displayEmployeeType(Employee::EmpType empType
     for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        if(sEmp->mEmployeeType == empTypeParam)
+        Employee::EmpType sEmpType = sEmp->getEmployeeType();
+        if(sEmpType == empTypeParam)
         {
-            if(sEmp->mEmployeeType == Employee::EmpType::FULLTIME)
+            if(sEmpType == Employee::EmpType::FULLTIME)
             {
                 std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
             }
-            else if(sEmp->mEmployeeType == Employee::EmpType::INTERN)
+            else if(sEmpType == Employee::EmpType::INTERN)
             {
                 std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
             }
-            else if(sEmp->mEmployeeType == Employee::EmpType::CONTRACTUAL)
+            else if(sEmpType == Employee::EmpType::CONTRACTUAL)
             {
                 std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
             }
@@ -194,15 +216,16 @@ template<class T> void Manager<T>::displayResignedEmployeeList(void)
     for(size_t sItr=0;sItr<mResignedEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
-        if(sEmp->mEmployeeType == Employee::EmpType::FULLTIME)
+        Employee::EmpType sEmpType = sEmp->getEmployeeType();
+        if(sEmpType == Employee::EmpType::FULLTIME)
         {
             std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
         }
-        else if(sEmp->mEmployeeType == Employee::EmpType::INTERN)
+        else if(sEmpType == Employee::EmpType::INTERN)
         {
             std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
         }
-        else if(sEmp->mEmployeeType == Employee::EmpType::CONTRACTUAL)
+        else if(sEmpType == Employee::EmpType::CONTRACTUAL)
         {
             std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
         }
@@ -220,15 +243,16 @@ template<class T> void Manager<T>::displayAllEmployee(void)
     for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        if(sEmp->mEmployeeType == Employee::EmpType::FULLTIME)
+        Employee::EmpType sEmpType = sEmp->getEmployeeType();
+        if(sEmpType == Employee::EmpType::FULLTIME)
         {
             std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
         }
-        else if(sEmp->mEmployeeType == Employee::EmpType::INTERN)
+        else if(sEmpType == Employee::EmpType::INTERN)
         {
             std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
         }
-        else if(sEmp->mEmployeeType == Employee::EmpType::CONTRACTUAL)
+        else if(sEmpType == Employee::EmpType::CONTRACTUAL)
         {
             std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
         }
@@ -246,17 +270,18 @@ template<class T> void Manager<T>::searchWithID(const std::string& empIDParam)
     for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        if(sEmp->mID == empIDParam)
+        Employee::EmpType sEmpType = sEmp->getEmployeeType();
+        if(sEmp->getID() == empIDParam)
         {
-            if(sEmp->mEmployeeType == Employee::EmpType::FULLTIME)
+            if(sEmpType == Employee::EmpType::FULLTIME)
             {
                 std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
             }
-            else if(sEmp->mEmployeeType == Employee::EmpType::INTERN)
+            else if(sEmpType == Employee::EmpType::INTERN)
             {
                 std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
             }
-            else if(sEmp->mEmployeeType == Employee::EmpType::CONTRACTUAL)
+            else if(sEmpType == Employee::EmpType::CONTRACTUAL)
             {
                 std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
             }
@@ -268,7 +293,7 @@ template<class T> void Manager<T>::searchWithID(const std::string& empIDParam)
 
 template<class T> void Manager<T>::addLeavesToAll(const uint8_t& leavesParam)
 {
-    FullEmp::mMaxLeaves += leavesParam;
+    FullEmp::setMaxLeaves(leavesParam);
     if(nullptr==mEmployeeList || mEmployeeList->empty())
     {
         std::cout << "No employees to add leaves!" << std::endl;
@@ -277,7 +302,7 @@ template<class T> void Manager<T>::addLeavesToAll(const uint8_t& leavesParam)
     for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        if(sEmp->mEmployeeType == Employee::EmpType::FULLTIME)
+        if(sEmp->getEmployeeType() == Employee::EmpType::FULLTIME)
         {
             sEmp->addLeavesToAll(leavesParam);
         }

@@ -23,9 +23,9 @@ Employee::~Employee()
 
 }
 
-void Employee::setDOLBasedOnDOJ(bool isDOJSet, std::string basedOnTodayDate = "")
+void Employee::setDOLBasedOnDOJ(bool isDOJSetParam, std::string basedOnTodayDateParam)
 {
-    if(isDOJSet == true)
+    if(isDOJSetParam == true)
     {
         if(mDOJ.length() != 10 || mEmployeeType == EmpType::NONE || mEmployeeType == EmpType::FULLTIME)
         {
@@ -55,21 +55,21 @@ void Employee::setDOLBasedOnDOJ(bool isDOJSet, std::string basedOnTodayDate = ""
     }
     else
     {
-        if(basedOnTodayDate.length() != 10 || mEmployeeType == EmpType::NONE || mEmployeeType == EmpType::FULLTIME)
+        if(basedOnTodayDateParam.length() != 10 || mEmployeeType == EmpType::NONE || mEmployeeType == EmpType::FULLTIME)
         {
             mDOL = "NA";
-            basedOnTodayDate.length() != 10 ? std::cout<<"DOJ is not set properly\n"<<std::endl : std::cout<<"DOL is set to NA\n"<<std::endl;
+            basedOnTodayDateParam.length() != 10 ? std::cout<<"DOJ is not set properly\n"<<std::endl : std::cout<<"DOL is set to NA\n"<<std::endl;
             return;
         }
         else if(mEmployeeType == EmpType::CONTRACTUAL)
         {
-            mDOL = basedOnTodayDate.substr(0,6) + std::to_string(std::stoi(basedOnTodayDate.substr(6,4)) + 1);
+            mDOL = basedOnTodayDateParam.substr(0,6) + std::to_string(std::stoi(basedOnTodayDateParam.substr(6,4)) + 1);
             return;
         }
         else if(mEmployeeType == EmpType::INTERN)
         {
-            int month = std::stoi(basedOnTodayDate.substr(3,2));
-            int year = std::stoi(basedOnTodayDate.substr(6,4));
+            int month = std::stoi(basedOnTodayDateParam.substr(3,2));
+            int year = std::stoi(basedOnTodayDateParam.substr(6,4));
             month += 6;
             if(month > 12)
             {
@@ -77,7 +77,7 @@ void Employee::setDOLBasedOnDOJ(bool isDOJSet, std::string basedOnTodayDate = ""
                 year += 1;
             }
             std::string monthStr = (month < 10) ? "0" + std::to_string(month) : std::to_string(month);
-            mDOL = basedOnTodayDate.substr(0,3) + monthStr + "-" + std::to_string(year);
+            mDOL = basedOnTodayDateParam.substr(0,3) + monthStr + "-" + std::to_string(year);
             return;
         }
     }
@@ -222,9 +222,9 @@ const std::string_view& Employee::getBranch(void)
     return "";
 }
 
-void Employee::getCollege(void)
+const std::string& Employee::getCollege(void)
 {
-    return;
+    return "";
 }
 
 const uint8_t Employee::getCurrentLeaves(void)
@@ -245,6 +245,16 @@ void Employee::renewLeaveBalance(const uint8_t& carryForwardToNextYear)
 void Employee::addLeavesToAll(const uint8_t& leavesParam)
 {
     return;
+}
+
+const Employee::EmpType Employee::getEmployeeType(void) const
+{
+    return mEmployeeType;
+}
+
+const Employee::EmpStatus Employee::getEmployeeStatus(void) const
+{
+    return mEmployeeStatus;
 }
 
 void Employee::setRandomDoj(void)

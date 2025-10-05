@@ -16,7 +16,7 @@ class Employee : public EmployeeIF
     std::string mFirstNames[10] = {"John", "Jane", "Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Hank"};
     std::string mLastNames[10] = {"Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"};
 
-    void setDOLBasedOnDOJ(bool isDOJSet, std::string setDOLBasedOnDOJ = "");
+    void setDOLBasedOnDOJ(bool isDOJSetParam, std::string basedOnTodayDateParam = "");
     void setIDBasedOnMemberNumberAndType(EmpType&);
     void setDOJ(void);
     void setRandomDoj(void);
@@ -39,7 +39,7 @@ class Employee : public EmployeeIF
     bool validCheck(std::istream& isParam);
     virtual std::string_view getAgency(void) const;
     virtual const std::string_view& getBranch(void);
-    virtual void getCollege(void);
+    virtual const std::string& getCollege(void);
     virtual const uint8_t getCurrentLeaves(void);
     virtual size_t getEmployeeCount();
     friend std::ostream& operator<<(std::ostream& osParam, const Employee* emp);
@@ -51,6 +51,8 @@ class Employee : public EmployeeIF
     const std::string_view getGender(void) const;
     const std::string_view getDOB(void) const;
     const std::string_view getDOJ(void) const;
+    const EmpType getEmployeeType(void) const;
+    const EmpStatus getEmployeeStatus(void) const;
 
     //Setter functions
     void setEmployeeType(EmpType empTypeParam);

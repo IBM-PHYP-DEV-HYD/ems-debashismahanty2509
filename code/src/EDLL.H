@@ -1,6 +1,7 @@
 #ifndef _EDLL_H_
 #define _EDLL_H_
 #include <iostream>
+#include "Deque.H"
 //class Declaration 
 template<class T>class Deque;
 
@@ -32,52 +33,52 @@ template<class T> EDLL<T>::EDLL(const size_t& osizeParam,const T &dataParam) : D
 
 template<class T> void EDLL<T>::addElementMiddle(const T& dataParam, size_t posParam)
 {
-    if(nullptr==mHead && nullptr==mTail)
+    if(nullptr==this->mHead && nullptr==this->mTail)
     {
-        mHead = new Node<T>(dataParam);
-        mTail = mHead;
-        mSize++;
+        this->mHead = new Node<T>(dataParam);
+        this->mTail = this->mHead;
+        this->mSize++;
         return;
     }
     else
     {
-        if(posParam>mSize)
+        if(posParam>this->mSize)
         {
             pushBack(dataParam);
             return;
         }
-        Node<T>* sItr = mHead;
+        Node<T>* sItr = this->mHead;
         for(size_t sItrIdx=0;sItrIdx<posParam-1;sItrIdx++)
         {
             sItr = sItr->mNextNode;
         }
         new Node<T>(dataParam,sItr,sItr->mNextNode);
-        mSize++;
+        this->mSize++;
         return;
     }
 }
 
 template<class T> void EDLL<T>::remElementMiddle(size_t posParam)
 {
-    if(nullptr==mHead && nullptr==mTail)
+    if(nullptr==this->mHead && nullptr==this->mTail)
     {
         return;
     }
-    else if(mHead==mTail)
+    else if(this->mHead==this->mTail)
     {
-        delete mHead;
-        mHead = mTail = nullptr;
-        mSize--;
+        delete this->mHead;
+        this->mHead = this->mTail = nullptr;
+        this->mSize--;
         return;
     }
     else
     {
         size_t tempCount=0;
-        if(posParam>=mSize/2)
+        if(posParam>=this->mSize/2)
         {
-            tempCount = mSize;
+            tempCount = this->mSize;
             Node<T> *sItr;
-            for(sItr=mTail;sItr!=nullptr;sItr=sItr->mPrevNode)
+            for(sItr=this->mTail;sItr!=nullptr;sItr=sItr->mPrevNode)
             {
                 if(tempCount--==posParam)
                 {
@@ -85,13 +86,13 @@ template<class T> void EDLL<T>::remElementMiddle(size_t posParam)
                     if(nullptr!=sItr->mNextNode)
                         sItr->mNextNode->mPrevNode = sItr->mPrevNode;
                     delete sItr;
-                    mSize--;
+                    this->mSize--;
                     return;
                 }
             }
         }
         Node<T> *sItr;
-        for(sItr=mHead;sItr!=nullptr;sItr=sItr->mNextNode)
+        for(sItr=this->mHead;sItr!=nullptr;sItr=sItr->mNextNode)
         {
             if(++tempCount==posParam)
             {
@@ -99,7 +100,7 @@ template<class T> void EDLL<T>::remElementMiddle(size_t posParam)
                 if(nullptr!=sItr->mNextNode)
                     sItr->mNextNode->mPrevNode = sItr->mPrevNode;
                 delete sItr;
-                mSize--;
+                this->mSize--;
                 return;
             }
         }
