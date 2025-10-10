@@ -388,6 +388,7 @@ template<class T> const T& Deque<T>::operator[](size_t osizeParam) const
         if(++temp_count==osizeParam)
             return sItr->mNodeData;
     }
+    return T();
 }
 
 /**

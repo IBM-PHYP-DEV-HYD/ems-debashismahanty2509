@@ -30,7 +30,7 @@ class Manager
 
     
 
-    static Manager* getInstance(const T& companyNameParam, std::string_view userNameParam = "", std::string_view PassParam = "");
+    static Manager* getInstance(const T& companyNameParam, std::string_view userNameParam = "admin", std::string_view PassParam = "admin");
     void addCredentials(std::string_view userNameParam, std::string_view PassParam);
     void addEmployee(Employee::EmpType empTypeParam);
     void removeEmployee(Employee::EmpType empTypeParam , const std::string& empIDParam);
@@ -42,11 +42,11 @@ class Manager
 
     private:
     Manager(T companyNameParam);
-    static Manager<T>* ownPtr;
+    static Manager<T>* mOwnPtr;
     
 };
 
-template<class T> Manager<T>* Manager<T>::ownPtr = nullptr;
+template<class T> Manager<T>* Manager<T>::mOwnPtr = nullptr;
 
 template<class T> Manager<T>::Manager(T companyNameParam) : mCompanyName(companyNameParam), 
 mEmployeeList(nullptr), mResignedEmployeeList(nullptr), mSizeOfFullTimeEmployee(0), 
@@ -71,11 +71,11 @@ template<class T> Manager<T>::~Manager()
 
 template<class T> Manager<T>* Manager<T>::getInstance(const T& companyNameParam, std::string_view userNameParam, std::string_view PassParam)
 {
-    if(nullptr != ownPtr && nullptr != ownPtr->mUserName && nullptr != ownPtr->mPassword)
+    if(nullptr != mOwnPtr && nullptr != mOwnPtr->mUserName && nullptr != mOwnPtr->mPassword)
     {
-        if(*(ownPtr->mUserName) == userNameParam && *(ownPtr->mPassword) == PassParam)
+        if(*(mOwnPtr->mUserName) == userNameParam && *(mOwnPtr->mPassword) == PassParam)
         {
-            return ownPtr;
+            return mOwnPtr;
         }
         else
         {
@@ -83,24 +83,14 @@ template<class T> Manager<T>* Manager<T>::getInstance(const T& companyNameParam,
             return nullptr;
         }
     }
-    if(nullptr==ownPtr)
+    if(nullptr==mOwnPtr)
     {
-        bool sFlag = false;
-        ownPtr = new Manager(companyNameParam);
-        if(userNameParam != "" && PassParam != "")
-        {
-            sFlag = true;
-            std::cout << "Adding Credentials" << std::endl;
-            ownPtr->addCredentials(userNameParam, PassParam);
-        }
-        if(sFlag == false)
-        {
-            std::cout << "Please call add credentials to get the instance next time." << std::endl;
-        }
-        else
-        {
-            std::cout<< "Manager instance created for company: " << companyNameParam << " To get the instance again, please provide credentials." << std::endl;
-        }
+        mOwnPtr = new Manager(companyNameParam);
+        
+        std::cout << "Adding Credentials" << std::endl;
+        mOwnPtr->addCredentials(userNameParam, PassParam);
+        //std::cout<< "Manager instance created for company: " << companyNameParam << " To get the instance again, please provide credentials. If not set call default credential" << std::endl;
+        return mOwnPtr;
     }
     return nullptr;
 }
@@ -240,10 +230,10 @@ template<class T> void Manager<T>::displayAllEmployee(void)
         std::cout << "No employees to display!" << std::endl;
         return;
     }
-    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
-        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        Employee::EmpType sEmpType = sEmp->getEmployeeType();
+        EmployeeIF* sEmp = mEmployeeList->operator[](sItr);
+        const Employee::EmpType sEmpType = sEmp->getEmployeeType();
         if(sEmpType == Employee::EmpType::FULLTIME)
         {
             std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
