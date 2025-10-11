@@ -38,8 +38,8 @@ class Employee : public EmployeeIF
     //Member functions
     bool validCheck(std::istream& isParam);
     virtual std::string_view getAgency(void) const;
-    virtual const std::string_view& getBranch(void);
-    virtual const std::string& getCollege(void);
+    virtual const std::string_view& getBranch(void) const;
+    virtual const std::string& getCollege(void) const;
     virtual const uint8_t getCurrentLeaves(void);
     virtual size_t getEmployeeCount();
     friend std::ostream& operator<<(std::ostream& osParam, const Employee* emp);

@@ -7,7 +7,22 @@ InternEmp::InternEmp() : Employee(EmployeeIF::EmpType::INTERN)
 {
     mSizeOfInternEmployee++;
     mCollege = static_cast<EmployeeIF::College>(rand() % 7);
-    mBranch = static_cast<EmployeeIF::Branch>(rand() % 3);
+    switch(static_cast<EmployeeIF::Branch>(rand() % 3))
+    {
+        case EmployeeIF::CSE:
+            mBranch = "CSE";
+            break;
+        case EmployeeIF::ECE:
+            mBranch = "ECE";
+            break;
+        case EmployeeIF::CSIT:
+            mBranch = "CSIT";
+            break;
+        default:
+            mBranch = "NA";
+            break;
+
+    }
 }
 
 InternEmp::InternEmp(EmpStatus empStatusParam) : Employee(EmployeeIF::EmpType::INTERN, empStatusParam)
@@ -29,17 +44,17 @@ size_t InternEmp::getEmployeeCount()
 std::ostream& operator<<(std::ostream& osParam, const InternEmp* emp)
 {
     osParam << static_cast<const Employee*>(emp);
-    osParam << "InternEmp: College=" << emp->mCollege;
-    osParam <<  "\nBranch=" << emp->mBranch;
+    osParam << "College=" << emp->getCollege();
+    osParam <<  "\nBranch=" << emp->getBranch();
     return osParam;
 }
 
-const std::string_view& InternEmp::getBranch(void)
+const std::string_view& InternEmp::getBranch(void) const
 {
     return mBranch;
 }
 
-const std::string& InternEmp::getCollege(void)
+const std::string& InternEmp::getCollege(void) const
 {
     switch(mCollege)
     {

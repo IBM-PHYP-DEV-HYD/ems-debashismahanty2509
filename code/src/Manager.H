@@ -245,6 +245,7 @@ void Manager::displayAllEmployee(void)
         {
             std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
         }
+        std::cout << "\n";
     }
 }
 

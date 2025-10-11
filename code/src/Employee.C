@@ -217,12 +217,12 @@ std::string_view Employee::getAgency(void) const
     return "";
 }
 
-const std::string_view& Employee::getBranch(void)
+const std::string_view& Employee::getBranch(void) const
 {
     return "";
 }
 
-const std::string& Employee::getCollege(void)
+const std::string& Employee::getCollege(void) const
 {
     return "";
 }
