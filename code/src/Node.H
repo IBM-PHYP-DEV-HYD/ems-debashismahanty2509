@@ -3,6 +3,7 @@
 #include <iostream>
 
 template<class T> class Deque;
+template<class U> class EDLL;
 
 /**
  * @class Node
@@ -22,6 +23,7 @@ protected:
     Node<T> *mPrevNode=nullptr;
     Node<T> *mNextNode=nullptr;
     template<class U> friend class Deque;
+    template<class U> friend class EDLL;
 };
 
 /**

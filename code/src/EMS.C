@@ -4,7 +4,7 @@
 class EMS
 {
     public:
-    Manager<std::string> *managerPtr = nullptr;
+    Manager *managerPtr = nullptr;
     EMS() = default;
     ~EMS() = default;
 };
@@ -12,7 +12,7 @@ class EMS
 int main()
 {
     EMS ems;
-    ems.managerPtr = Manager<std::string>::getInstance("XYZ Corp", "admin", "password123");
+    ems.managerPtr = Manager::getInstance("XYZ Corp", "admin", "password123");
     if(NULL != ems.managerPtr)
     {
         ems.managerPtr->addEmployee(Employee::EmpType::FULLTIME);
