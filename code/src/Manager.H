@@ -32,6 +32,7 @@ class Manager
     static Manager* getInstance(const std::string& companyNameParam, std::string_view userNameParam = "admin", std::string_view PassParam = "admin");
     void addCredentials(std::string_view userNameParam, std::string_view PassParam);
     void addEmployee(Employee::EmpType empTypeParam);
+    void addRandomEmp(void);
     void removeEmployee(Employee::EmpType empTypeParam , const std::string& empIDParam);
     void displayEmployeeType(Employee::EmpType empTypeParam);
     void displayResignedEmployeeList(void);

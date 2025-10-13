@@ -7,10 +7,10 @@ class EmployeeIF
     public:
     enum EmpType
     {
-        NONE,
-        FULLTIME,
-        INTERN,
-        CONTRACTUAL
+        FULLTIME    = 0,
+        INTERN      = 1,
+        CONTRACTUAL = 2,
+        NONE        = 3,
     };
     enum EmpStatus
     {

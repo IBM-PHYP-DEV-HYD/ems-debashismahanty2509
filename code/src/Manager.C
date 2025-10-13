@@ -96,6 +96,11 @@ void Manager::addEmployee(Employee::EmpType empTypeParam)
     mEmployeeList->pushBack(sNewEmp);
 }
 
+void Manager::addRandomEmp(void)
+{
+    addEmployee(static_cast<Employee::EmpType>(rand() % 3));
+}
+
 void Manager::removeEmployee(Employee::EmpType empTypeParam , const std::string& empIDParam)
 {
     // Implementation to remove employee based on empTypeParam and empIDParam
