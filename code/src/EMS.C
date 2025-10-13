@@ -8,6 +8,23 @@ class EMS
     {
         AddAnEmployee   = 0,
         AddEmpRandom    = 1,
+        AddEmpWithType  = 2,
+
+        RemoveAnEmployee= 5,
+
+        EmployeeDetails = 6,
+        AllEmpSummary   = 7,
+        EmpSummaryType  = 8,
+        EmpSummaryGender= 9,
+        EmpSummaryStatus= 10,
+        EmpDetailsWtId  = 11,
+
+        Other           = 14,
+        AddnNumLeaves   = 15,
+        ConvIntern2Full = 16,
+        SearchEmpId     = 17,
+        SearchEmpName   = 18,
+
         MainMenu        = 12,
         Exit            = 13
     };
@@ -35,10 +52,74 @@ class EMS
             {
                 case AddAnEmployee:
                     {
-                        Opeartion sType = displayAddEmployeeMenu(sChoice);
+                        EmployeeIF::EmpType sEmpType;
+                        Opeartion sType = displayAddEmployeeMenu(sChoice,sEmpType);
                         if(sType == AddEmpRandom)
                         {
+                            managerPtr->addRandomEmp();
+                        }
+                        else if(sType == AddEmpWithType)
+                        {
+                            managerPtr->addEmployee(sEmpType);
+                        }
+                    }
+                    break;
+                case RemoveAnEmployee:
+                    {
+                        std::string sId;
+                        std::cout << "Enter the Emp Id: \n";
+                        std::getline(std::cin>>std::ws,sId);
+                        managerPtr->removeEmployee(sId);
+                    }
+                    break;
+                case EmployeeDetails:
+                    {
+                        EmployeeIF::EmpType sEmpType;
+                        Employee::EmpStatus sEmpStatus;
+                        EmployeeIF::EmpGender sEmpGender;
+                        std::string sEmpId;
+                        Opeartion sType = displayEmployeeDetailsMenu(sChoice,sEmpType,sEmpStatus,sEmpGender,sEmpId);
+                        if(sType == AllEmpSummary)
+                        {
+                            managerPtr->displayAllEmployee();
+                        }
+                        else if(sType == EmpSummaryType)
+                        {
+                            managerPtr->displayEmployeeType(sEmpType);
+                        }
+                        else if(sType == EmpSummaryGender)
+                        {
+                            managerPtr->searchWithGender(sEmpGender);
+                        }
+                        else if(sType == EmpSummaryStatus)
+                        {
+                            managerPtr->searchWithStatus(sEmpStatus);
+                        }
+                        else if(sType == EmpDetailsWtId)
+                        {
+                            managerPtr->searchWithID(sEmpId);
+                        }
+                    }
+                    break;
+                case Other:
+                    {
+                        std::string sEmpName,sEmpId;
+                        Opeartion sType = displayOthersMenu(sChoice,sEmpId,sEmpName);
+                        if(sType == AddnNumLeaves)
+                        {
+                            managerPtr->addLeavesToAll(1);
+                        }
+                        else if(sType == ConvIntern2Full)
+                        {
                             // managerPtr->
+                        }
+                        else if(sType == SearchEmpId)
+                        {
+                            managerPtr->searchWithID(sEmpId);
+                        }
+                        else if(sType == SearchEmpName)
+                        {
+                            managerPtr->searchWithName(sEmpName);
                         }
                     }
                     break;
@@ -72,6 +153,104 @@ class EMS
     // 3 Search an Employee by ID Emp ID
     // 4 Search an Employee by Name Name / part of the name
     protected:
+    void inputEmpType(EmployeeIF::EmpType& sEmpTypeParam)
+    {
+        bool isValid = true;
+        char sInput;
+        do
+        {
+            std::cout << "Enter the Emp Type (F/C/I)\n";
+            std::cin >> sInput;
+            if(validCheck(std::cin) == false)
+            {
+                isValid = false;
+            }
+            else if(sInput != 'F' && sInput != 'C' && sInput != 'I' && sInput != 'f' && sInput != 'c' && sInput != 'i')
+            {
+                isValid = false;
+            }
+            else
+            {
+                isValid = true;
+            }
+        } while (isValid == false);
+        if(sInput == 'F' || sInput == 'f')
+        {
+            sEmpTypeParam = EmployeeIF::FULLTIME;
+        }
+        else if(sInput == 'C' || sInput == 'c')
+        {
+            sEmpTypeParam = EmployeeIF::CONTRACTUAL;
+        }
+        else
+        {
+            sEmpTypeParam = EmployeeIF::INTERN;
+        }
+    }
+    void inputEmpStatus(EmployeeIF::EmpStatus& sEmpStatusParam)
+    {
+        bool isValid = true;
+        char sInput;
+        do
+        {
+            std::cout << "Enter the Emp Status (A->Active/I->InActive/R->Resigned)\n";
+            std::cin >> sInput;
+            if(validCheck(std::cin) == false)
+            {
+                isValid = false;
+            }
+            else if(sInput != 'A' && sInput != 'I' && sInput != 'R' && sInput != 'a' && sInput != 'i' && sInput != 'r')
+            {
+                isValid = false;
+            }
+            else
+            {
+                isValid = true;
+            }
+        } while (isValid == false);
+        if(sInput == 'A' || sInput == 'a')
+        {
+            sEmpStatusParam = EmployeeIF::ACTIVE;
+        }
+        else if(sInput == 'i' || sInput == 'I')
+        {
+            sEmpStatusParam = EmployeeIF::INACTIVE;
+        }
+        else
+        {
+            sEmpStatusParam = EmployeeIF::RESIGNED;
+        }
+    }
+    void inputEmpGender(EmployeeIF::EmpGender& sEmpGenderParam)
+    {
+        bool isValid = true;
+        char sInput;
+        do
+        {
+            std::cout << "Enter the Gender (M/F)\n";
+            std::cin >> sInput;
+            if(validCheck(std::cin) == false)
+            {
+                isValid = false;
+            }
+            else if(sInput != 'M' && sInput != 'm' && sInput != 'F' && sInput != 'f')
+            {
+                isValid = false;
+            }
+            else
+            {
+                isValid = true;
+            }
+        } while (isValid == false);
+        if(sInput == 'M' || sInput == 'm')
+        {
+            sEmpGenderParam = EmployeeIF::Male;
+        }
+        else if(sInput == 'F' || sInput == 'f')
+        {
+            sEmpGenderParam = EmployeeIF::Female;
+        }
+    }
     uint8_t displayMainMenu(void)
     {
         uint8_t sChoice;
@@ -99,9 +278,17 @@ class EMS
         {
             sChoice = Exit;
         }
+        else if(sChoice == 2)
+        {
+            sChoice = RemoveAnEmployee;
+        }
+        else if(sChoice == 3)
+        {
+            sChoice = EmployeeDetails;
+        }
         return sChoice;
     }
-    Opeartion displayAddEmployeeMenu(uint8_t& sChoiceParam)
+    Opeartion displayAddEmployeeMenu(uint8_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam)
     {
         bool isValid = true;
         do
@@ -127,24 +314,8 @@ class EMS
                 return AddEmpRandom;
                 break;
             case 2:
-                char sInput;
-                do
-                {
-                    std::cout << "Enter the Emp Type (F/C/I)\n";
-                    std::cin >> sInput;
-                    if(validCheck(std::cin) == false)
-                    {
-                        isValid = false;
-                    }
-                    else if(sInput != 'F' && sInput != 'C' && sInput != 'I' && sInput != 'f' && sInput != 'c' && sInput != 'i')
-                    {
-                        isValid = false;
-                    }
-                    else
-                    {
-                        isValid = true;
-                    }
-                } while (isValid == false);
+                inputEmpType(sEmpTypeParam);
+                return AddEmpWithType;
                 break;
             case 3:
                 return MainMenu;
@@ -154,8 +325,9 @@ class EMS
         }
         return MainMenu;
     }
-    void displayEmployeeDetailsMenu(uint8_t& sChoiceParam)
+    Opeartion displayEmployeeDetailsMenu(uint8_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, EmployeeIF::EmpStatus& sEmpStatusParam, EmployeeIF::EmpGender& sEmpGenderParam, std::string& sEmpIdParam)
     {
+        bool isValid = true;
         do
         {
             std::cout << "Employee Details" << std::endl;
@@ -167,10 +339,46 @@ class EMS
             std::cout << "6. Back to Main Menu" << std::endl;
             std::cout << "Enter your choice: ";
             std::cin >> sChoiceParam;
-        } while (validCheck(std::cin) == false || sChoiceParam > 6);
+            if(validCheck(std::cin) == false)
+            {
+                isValid = false;
+            }
+            else
+            {
+                isValid = true;
+            }
+        } while (isValid == false || sChoiceParam > 6 || sChoiceParam == 0);
+
+        if(sChoiceParam == 1)
+        {
+            return AllEmpSummary;
+        }
+        else if(sChoiceParam == 2)
+        {
+            inputEmpType(sEmpTypeParam);
+            return EmpSummaryType;
+        }
+        else if(sChoiceParam == 3)
+        {
+            inputEmpGender(sEmpGenderParam);
+            return EmpSummaryGender;
+        }
+        else if(sChoiceParam == 4)
+        {
+            inputEmpStatus(sEmpStatusParam);
+            return EmpSummaryStatus;
+        }
+        else if(sChoiceParam == 5)
+        {
+            std::cout << "Enter the Emp Id: \n";
+            std::getline(std::cin>>std::ws,sEmpIdParam);
+            return EmpDetailsWtId;
+        }
+        return MainMenu;
     }
-    void displayOthersMenu(uint8_t& sChoiceParam)
+    Opeartion displayOthersMenu(uint8_t& sChoiceParam, std::string& sEmpIdParam, std::string& sEmpName)
     {
+        bool isValid = true;
         do
         {
             std::cout << "Others" << std::endl;
@@ -181,7 +389,38 @@ class EMS
             std::cout << "5. Back to Main Menu" << std::endl;
             std::cout << "Enter your choice: ";
             std::cin >> sChoiceParam;
-        } while (validCheck(std::cin) == false || sChoiceParam > 5);
+            if(validCheck(std::cin) == false)
+            {
+                isValid = false;
+            }
+            else
+            {
+                isValid = true;
+            }
+        } while (isValid == false || sChoiceParam > 5);
+        if(sChoiceParam == 1)
+        {
+            return AddnNumLeaves;
+        }
+        else if(sChoiceParam == 2)
+        {
+            std::cout << "Enter the Emp Id: \n";
+            std::getline(std::cin>>std::ws,sEmpIdParam);
+            return ConvIntern2Full;
+        }
+        else if(sChoiceParam == 3)
+        {
+            std::cout << "Enter the Emp Id: \n";
+            std::getline(std::cin>>std::ws,sEmpIdParam);
+            return SearchEmpId;
+        }
+        else if(sChoiceParam == 4)
+        {
+            std::cout << "Enter the Emp Name: \n";
+            std::getline(std::cin>>std::ws,sEmpName);
+            return SearchEmpName;
+        }
+        return MainMenu;
     }
 };
 
@@ -191,10 +430,11 @@ int main()
     ems.managerPtr = Manager::getInstance("XYZ Corp", "admin", "password123");
     if(NULL != ems.managerPtr)
     {
-        ems.managerPtr->addEmployee(Employee::EmpType::FULLTIME);
-        ems.managerPtr->addEmployee(Employee::EmpType::INTERN);
-        ems.managerPtr->addEmployee(Employee::EmpType::CONTRACTUAL);
-        ems.managerPtr->displayAllEmployee();
+        // ems.managerPtr->addEmployee(Employee::EmpType::FULLTIME);
+        // ems.managerPtr->addEmployee(Employee::EmpType::INTERN);
+        // ems.managerPtr->addEmployee(Employee::EmpType::CONTRACTUAL);
+        // ems.managerPtr->displayAllEmployee();
+        ems.handleMenu();
     }
     return 0;
 }

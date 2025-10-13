@@ -9,7 +9,8 @@ class Employee : public EmployeeIF
     private:
     std::string mName;
     std::string mID;
-    char mGender; // M or F
+    EmployeeIF::EmpGender mGender;
+    // char mGender; // M or F
     std::string mDOB; // DD-MM-YYYY
     static size_t mMemberNumbers;
     //Random name generator arrays
@@ -22,6 +23,7 @@ class Employee : public EmployeeIF
     void setRandomDoj(void);
     void changeIdwithEmpType(void);
     void getTodayDate(std::string& dateParam);
+    void setRandomGender(void);
 
 
     public:
@@ -49,6 +51,7 @@ class Employee : public EmployeeIF
     const std::string_view getName(void) const;
     const std::string_view getID(void) const;
     const std::string_view getGender(void) const;
+    const EmployeeIF::EmpGender& getGenderType(void) const;
     const std::string_view getDOB(void) const;
     const std::string_view getDOJ(void) const;
     const EmpType getEmployeeType(void) const;

@@ -2,12 +2,13 @@
 
 size_t Employee::mMemberNumbers = 0;
 
-Employee::Employee(EmpType empTypeParam) : mEmployeeType(empTypeParam), mEmployeeStatus(EmpStatus::ACTIVE), mGender('N'), mDOB("NA")
+Employee::Employee(EmpType empTypeParam) : mEmployeeType(empTypeParam), mEmployeeStatus(EmpStatus::ACTIVE), mGender(EmployeeIF::EmpGender::None), mDOB("NA")
 {
     //Randomly generate employee type and Name
     mName = mFirstNames[rand() % 10] + " " + mLastNames[rand() % 10];
     setIDBasedOnMemberNumberAndType(mEmployeeType);
     setRandomDoj();
+    setRandomGender();
 }
 
 Employee::Employee(EmpType empTypeParam, EmpStatus empStatusParam) : mEmployeeType(empTypeParam), mEmployeeStatus(empStatusParam)
@@ -21,6 +22,11 @@ Employee::Employee(EmpType empTypeParam, EmpStatus empStatusParam) : mEmployeeTy
 Employee::~Employee()
 {
 
+}
+
+void Employee::setRandomGender(void)
+{
+    mGender = static_cast<EmployeeIF::EmpGender>(rand() % 2);
 }
 
 void Employee::setDOLBasedOnDOJ(bool isDOJSetParam, std::string basedOnTodayDateParam)
@@ -128,11 +134,11 @@ const std::string_view Employee::getID(void) const
 
 const std::string_view Employee::getGender(void) const 
 { 
-    if(mGender=='M')
+    if(mGender==EmployeeIF::Male)
     {
         return "Male";
     }
-    else if(mGender=='F')
+    else if(mGender==EmployeeIF::Female)
     {
         return "Female";
     }
@@ -140,6 +146,11 @@ const std::string_view Employee::getGender(void) const
     {
         return "NA";
     }
+}
+
+const EmployeeIF::EmpGender& Employee::getGenderType(void) const
+{
+    return mGender;
 }
 
 const std::string_view Employee::getDOB(void) const 
@@ -309,7 +320,7 @@ std::ostream& operator<<(std::ostream& osParam, const Employee* emp)
 {
     osParam << "Name: " << emp->mName << std::endl;
     osParam << "ID: " << emp->mID << std::endl;
-    osParam << "Gender: " << emp->mGender << std::endl;
+    osParam << "Gender: " << emp->getGender() << std::endl;
     osParam << "DOB: " << emp->mDOB << std::endl;
     osParam << "DOJ: " << emp->mDOJ << std::endl;
     osParam << "DOL: " << emp->mDOL << std::endl;
@@ -353,11 +364,20 @@ std::istream& operator>>(std::istream& isParam, Employee* emp)
     std::cout<< "Enter Name: ";
     std::getline(std::cin>>std::ws,emp->mName);
 
+    char sGender;
     std::cout<<"Enter the Gender (M/F): ";
-    std::cin>>emp->mGender;
+    std::cin>>sGender;
     if(emp->validCheck(std::cin) ==false)
     {
-        emp->mGender = 'N';
+        emp->mGender = EmployeeIF::EmpGender::None;
+    }
+    if(sGender == 'M' || sGender == 'm')
+    {
+        emp->mGender = EmployeeIF::EmpGender::Male;
+    }
+    else if(sGender == 'F' || sGender == 'f')
+    {
+        emp->mGender = EmployeeIF::EmpGender::Female;
     }
     
     std::cout<<"Enter DOB (DD-MM-YYYY): ";

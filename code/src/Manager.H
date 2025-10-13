@@ -33,11 +33,14 @@ class Manager
     void addCredentials(std::string_view userNameParam, std::string_view PassParam);
     void addEmployee(Employee::EmpType empTypeParam);
     void addRandomEmp(void);
-    void removeEmployee(Employee::EmpType empTypeParam , const std::string& empIDParam);
+    void removeEmployee(const std::string& empIDParam);
     void displayEmployeeType(Employee::EmpType empTypeParam);
     void displayResignedEmployeeList(void);
     void displayAllEmployee(void);
     void searchWithID(const std::string& empIDParam);
+    void searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam);
+    void searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam);
+    void searchWithName(const std::string& sEmpNameParam) const;
     void addLeavesToAll(const uint8_t& leavesParam);
 
     private:

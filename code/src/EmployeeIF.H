@@ -5,6 +5,12 @@
 class EmployeeIF
 {
     public:
+    enum EmpGender
+    {
+        Male        = 0,
+        Female      = 1,
+        None        = 2,
+    };
     enum EmpType
     {
         FULLTIME    = 0,
@@ -57,6 +63,7 @@ class EmployeeIF
     virtual const std::string_view getName(void) const = 0;
     virtual const std::string_view getID(void) const = 0;
     virtual const std::string_view getGender(void) const = 0;
+    virtual const EmployeeIF::EmpGender& getGenderType(void) const = 0;
     virtual const std::string_view getDOB(void) const = 0;
 
     virtual void setEmployeeType(EmpType empTypeParam) = 0;
