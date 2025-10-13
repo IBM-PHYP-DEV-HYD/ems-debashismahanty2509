@@ -44,8 +44,8 @@ size_t InternEmp::getEmployeeCount()
 std::ostream& operator<<(std::ostream& osParam, const InternEmp* emp)
 {
     osParam << static_cast<const Employee*>(emp);
-    osParam << "College=" << emp->getCollege();
-    osParam <<  "\nBranch=" << emp->getBranch();
+    osParam << "College= " << emp->getCollege() << std::endl;
+    osParam <<  "Branch=" << emp->getBranch() << std::endl;
     return osParam;
 }
 
@@ -54,7 +54,7 @@ const std::string_view& InternEmp::getBranch(void) const
     return mBranch;
 }
 
-const std::string& InternEmp::getCollege(void) const
+std::string InternEmp::getCollege(void) const
 {
     switch(mCollege)
     {

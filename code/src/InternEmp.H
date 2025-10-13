@@ -15,7 +15,7 @@ class InternEmp : public Employee
     virtual ~InternEmp();
     size_t getEmployeeCount() override;
     const std::string_view& getBranch(void) const override;
-    const std::string& getCollege(void) const override;
+    std::string getCollege(void) const override;
     friend std::ostream& operator<<(std::ostream& osParam , const InternEmp* empParam);
     friend std::istream& operator>>(std::istream& isParam, InternEmp* emp);
 

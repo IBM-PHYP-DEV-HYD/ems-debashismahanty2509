@@ -57,7 +57,7 @@ class EmployeeIF
     virtual size_t getEmployeeCount() = 0;
     virtual std::string_view getAgency(void) const = 0;
     virtual const std::string_view& getBranch(void) const = 0;
-    virtual const std::string& getCollege(void) const = 0;
+    virtual std::string getCollege(void) const = 0;
     virtual const uint8_t getCurrentLeaves(void) = 0;
 
     virtual const std::string_view getName(void) const = 0;

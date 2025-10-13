@@ -1,7 +1,8 @@
 #include "Employee.H"
 
 size_t Employee::mMemberNumbers = 0;
-
+std::string Employee::mFirstNames[10] = {"John", "Jane", "Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Hank"};
+std::string Employee::mLastNames[10] = {"Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"};
 Employee::Employee(EmpType empTypeParam) : mEmployeeType(empTypeParam), mEmployeeStatus(EmpStatus::ACTIVE), mGender(EmployeeIF::EmpGender::None), mDOB("NA")
 {
     //Randomly generate employee type and Name
@@ -233,7 +234,7 @@ const std::string_view& Employee::getBranch(void) const
     return "";
 }
 
-const std::string& Employee::getCollege(void) const
+std::string Employee::getCollege(void) const
 {
     return "";
 }

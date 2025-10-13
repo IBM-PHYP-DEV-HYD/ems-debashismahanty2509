@@ -42,10 +42,12 @@ class Manager
     void searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam);
     void searchWithName(const std::string& sEmpNameParam) const;
     void addLeavesToAll(const uint8_t& leavesParam);
+    void conv2Full(const std::string& empIDParam);
 
     private:
     Manager(std::string companyNameParam);
     static Manager* mOwnPtr;
+    EmployeeIF* searchIDIntern(const std::string& empIdParam);
     
 };
 #endif

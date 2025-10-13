@@ -1,28 +1,39 @@
 #include "FullEmp.H"
+#include "InternEmp.H"
 
 size_t FullEmp::mSizeOfFullEmployee = 0;
 uint8_t FullEmp::mMaxLeaves = 22;
 FullEmp::FullEmp() : Employee(EmployeeIF::EmpType::FULLTIME), mCurrentLeaves(0), mLeaveApplied(0)
 {
-    mSizeOfFullEmployee++;
-    std::string_view sDOJ = getDOJ();
-
-    if(sDOJ != "NA" && sDOJ.length() == 10)
-    {
-        int8_t sLeftMonth = 12 - std::stoi(std::string(sDOJ.substr(3,2)));
-        mCurrentLeaves = (sLeftMonth * mMaxLeaves) / 12;
-    }
+    genericConstCall();
 }
 
 FullEmp::FullEmp(EmpStatus empStatusParam) : Employee(EmployeeIF::EmpType::FULLTIME, empStatusParam), mCurrentLeaves(0), mLeaveApplied(0)
 {
+    genericConstCall();
+}
+
+void FullEmp::genericConstCall(void)
+{
     mSizeOfFullEmployee++;
     std::string_view sDOJ = getDOJ();
-
+    std::string sTodaysDate;
+    getTodayDate(sTodaysDate);
+    int8_t sLeftMonth;
     if(sDOJ != "NA" && sDOJ.length() == 10)
     {
-        int8_t sLeftMonth = 12 - std::stoi(std::string(sDOJ.substr(3,2)));
-        mCurrentLeaves = (sLeftMonth * mMaxLeaves) / 12;
+        int sTodayYear = std::stoi(std::string(sTodaysDate.substr(6,4)));
+        int sDOJYear = std::stoi(std::string(sDOJ.substr(6,4)));
+        if(sTodayYear == sDOJYear)
+        {
+            sLeftMonth = 12 - std::stoi(std::string(sDOJ.substr(3,2)));
+            mCurrentLeaves = (sLeftMonth * mMaxLeaves) / 12;
+        }
+        else
+        {
+            mCurrentLeaves = mMaxLeaves;
+        }
+        
     }
 }
 
@@ -80,7 +91,7 @@ void FullEmp::addLeavesToAll(const uint8_t& leavesParam)
 
 void FullEmp::setMaxLeaves(const uint8_t& maxLeavesParam)
 {
-    mMaxLeaves = maxLeavesParam;
+    mMaxLeaves += maxLeavesParam;
 }
 
 std::ostream& operator<<(std::ostream& osParam , const FullEmp* empParam)
@@ -89,4 +100,15 @@ std::ostream& operator<<(std::ostream& osParam , const FullEmp* empParam)
     osParam << "Current Leaves: " << (int)empParam->mCurrentLeaves << std::endl;
     osParam << "Leaves Applied: " << (int)empParam->mLeaveApplied << std::endl;
     return osParam;
+}
+
+void convertIntern2FullTime(FullEmp* fullEmpParam, const Employee* empParam)
+{
+    Employee* sEmpcastFull =  dynamic_cast<Employee*>(fullEmpParam);
+    sEmpcastFull->mName = empParam->mName;
+    sEmpcastFull->mGender = empParam->mGender;
+    sEmpcastFull->mDOB = empParam->mDOB;
+    sEmpcastFull->mDOJ = empParam->mDOJ;
+
+    
 }

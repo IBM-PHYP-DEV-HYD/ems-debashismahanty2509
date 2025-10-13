@@ -3,7 +3,7 @@
 #include <iostream>
 #include "EmployeeIF.H"
 class EmployeeIF;
-
+class FullEmp;
 class Employee : public EmployeeIF
 {
     private:
@@ -14,17 +14,18 @@ class Employee : public EmployeeIF
     std::string mDOB; // DD-MM-YYYY
     static size_t mMemberNumbers;
     //Random name generator arrays
-    std::string mFirstNames[10] = {"John", "Jane", "Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Hank"};
-    std::string mLastNames[10] = {"Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"};
+    static std::string mFirstNames[10];
+    static std::string mLastNames[10];
 
     void setDOLBasedOnDOJ(bool isDOJSetParam, std::string basedOnTodayDateParam = "");
     void setIDBasedOnMemberNumberAndType(EmpType&);
     void setDOJ(void);
     void setRandomDoj(void);
     void changeIdwithEmpType(void);
-    void getTodayDate(std::string& dateParam);
     void setRandomGender(void);
 
+    protected:
+    void getTodayDate(std::string& dateParam);
 
     public:
     EmpType mEmployeeType;
@@ -41,11 +42,13 @@ class Employee : public EmployeeIF
     bool validCheck(std::istream& isParam);
     virtual std::string_view getAgency(void) const;
     virtual const std::string_view& getBranch(void) const;
-    virtual const std::string& getCollege(void) const;
+    virtual std::string getCollege(void) const;
     virtual const uint8_t getCurrentLeaves(void);
     virtual size_t getEmployeeCount();
     friend std::ostream& operator<<(std::ostream& osParam, const Employee* emp);
     friend std::istream& operator>>(std::istream& isParam, Employee* emp);
+    friend void convertIntern2FullTime(FullEmp* fullEmpParam, const Employee* empParam);
+
 
     //Getter functions
     const std::string_view getName(void) const;

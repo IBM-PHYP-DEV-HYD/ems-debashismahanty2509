@@ -45,8 +45,8 @@ class EMS
     void handleMenu(void)
     {
         //NULL check
-        uint8_t sChoice;
-        while(sChoice = displayMainMenu() && sChoice != Exit)
+        uint16_t sChoice = 0;
+        while(displayMainMenu(sChoice) && sChoice != Exit)
         {
             switch(sChoice)
             {
@@ -111,7 +111,7 @@ class EMS
                         }
                         else if(sType == ConvIntern2Full)
                         {
-                            // managerPtr->
+                            managerPtr->conv2Full(sEmpId);
                         }
                         else if(sType == SearchEmpId)
                         {
@@ -251,9 +251,8 @@ class EMS
             sEmpGenderParam = EmployeeIF::Female;
         }
     }
-    uint8_t displayMainMenu(void)
+    bool displayMainMenu(uint16_t& sChoice)
     {
-        uint8_t sChoice;
         bool isValid = true;
         do
         {
@@ -277,6 +276,7 @@ class EMS
         if(sChoice == 5)
         {
             sChoice = Exit;
+            return false;
         }
         else if(sChoice == 2)
         {
@@ -286,9 +286,17 @@ class EMS
         {
             sChoice = EmployeeDetails;
         }
-        return sChoice;
+        else if(sChoice == 1)
+        {
+            sChoice = AddAnEmployee;
+        }
+        else if(sChoice == 4)
+        {
+            sChoice = Other;
+        }
+        return true;
     }
-    Opeartion displayAddEmployeeMenu(uint8_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam)
+    Opeartion displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam)
     {
         bool isValid = true;
         do
@@ -325,7 +333,7 @@ class EMS
         }
         return MainMenu;
     }
-    Opeartion displayEmployeeDetailsMenu(uint8_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, EmployeeIF::EmpStatus& sEmpStatusParam, EmployeeIF::EmpGender& sEmpGenderParam, std::string& sEmpIdParam)
+    Opeartion displayEmployeeDetailsMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, EmployeeIF::EmpStatus& sEmpStatusParam, EmployeeIF::EmpGender& sEmpGenderParam, std::string& sEmpIdParam)
     {
         bool isValid = true;
         do
@@ -376,7 +384,7 @@ class EMS
         }
         return MainMenu;
     }
-    Opeartion displayOthersMenu(uint8_t& sChoiceParam, std::string& sEmpIdParam, std::string& sEmpName)
+    Opeartion displayOthersMenu(uint16_t& sChoiceParam, std::string& sEmpIdParam, std::string& sEmpName)
     {
         bool isValid = true;
         do

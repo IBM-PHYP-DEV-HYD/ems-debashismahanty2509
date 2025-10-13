@@ -110,7 +110,7 @@ void Manager::removeEmployee(const std::string& empIDParam)
         std::cout << "No employees to remove!" << std::endl;
         return;
     }
-    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
         if(sEmp->getID() == empIDParam)
@@ -143,7 +143,7 @@ void Manager::displayEmployeeType(Employee::EmpType empTypeParam)
         std::cout << "No employees to display!" << std::endl;
         return;
     }
-    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
         Employee::EmpType sEmpType = sEmp->getEmployeeType();
@@ -173,7 +173,7 @@ void Manager::displayResignedEmployeeList(void)
         std::cout << "No resigned employees to display!" << std::endl;
         return;
     }
-    for(size_t sItr=0;sItr<mResignedEmployeeList->size();sItr++)
+    for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
         Employee::EmpType sEmpType = sEmp->getEmployeeType();
@@ -228,7 +228,7 @@ void Manager::searchWithID(const std::string& empIDParam)
         std::cout << "No employees to search!" << std::endl;
         return;
     }
-    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
         Employee::EmpType sEmpType = sEmp->getEmployeeType();
@@ -252,6 +252,26 @@ void Manager::searchWithID(const std::string& empIDParam)
     std::cout << "Employee with ID " << empIDParam << " not found!" << std::endl;
 }
 
+EmployeeIF* Manager::searchIDIntern(const std::string& empIdParam)
+{
+    // Implementation to search employee based on empIDParam
+    if(nullptr==mEmployeeList || mEmployeeList->empty())
+    {
+        std::cout << "No employees to search!" << std::endl;
+        return NULL;
+    }
+    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
+    {
+        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
+        Employee::EmpType sEmpType = sEmp->getEmployeeType();
+        if(sEmp->getID() == empIdParam && sEmpType == Employee::EmpType::INTERN)
+        {
+            return sEmp;
+        }
+    }
+    return NULL;
+}
+
 void Manager::searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam)
 {
     // Implementation to search employee based on sEmpGenderParam
@@ -260,7 +280,7 @@ void Manager::searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam)
         std::cout << "No employees to search!" << std::endl;
         return;
     }
-    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
         Employee::EmpType sEmpType = sEmp->getEmployeeType();
@@ -291,7 +311,7 @@ void Manager::searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam)
         std::cout << "No employees to search!" << std::endl;
         return;
     }
-    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
         Employee::EmpType sEmpType = sEmp->getEmployeeType();
@@ -322,7 +342,7 @@ void Manager::searchWithName(const std::string& sEmpNameParam) const
         std::cout << "No employees to search!" << std::endl;
         return;
     }
-    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
         Employee::EmpType sEmpType = sEmp->getEmployeeType();
@@ -353,12 +373,28 @@ void Manager::addLeavesToAll(const uint8_t& leavesParam)
         std::cout << "No employees to add leaves!" << std::endl;
         return;
     }
-    for(size_t sItr=0;sItr<mEmployeeList->size();sItr++)
+    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
         if(sEmp->getEmployeeType() == Employee::EmpType::FULLTIME)
         {
             sEmp->addLeavesToAll(leavesParam);
         }
+    }
+}
+
+void Manager::conv2Full(const std::string& empIDParam)
+{
+    EmployeeIF* sInternEmp = searchIDIntern(empIDParam);
+    if(NULL != sInternEmp)
+    {
+        EmployeeIF* sNewEmp =  new FullEmp();
+        convertIntern2FullTime(dynamic_cast<FullEmp*>(sNewEmp),dynamic_cast<Employee*>(sInternEmp));
+        if(nullptr==mEmployeeList)
+        {
+            mEmployeeList = new EDLL<EmployeeIF*>(1, sNewEmp);
+            return;
+        }
+        mEmployeeList->pushBack(sNewEmp);
     }
 }
