@@ -23,10 +23,11 @@ void EMS::handleMenu(void)
             case AddAnEmployee:
                 {
                     EmployeeIF::EmpType sEmpType;
-                    Opeartion sType = displayAddEmployeeMenu(sChoice,sEmpType);
+                    uint16_t sNumOfEmp = 0;
+                    Opeartion sType = displayAddEmployeeMenu(sChoice,sEmpType,sNumOfEmp);
                     if(sType == AddEmpRandom)
                     {
-                        mManagerPtr->addRandomEmp();
+                        mManagerPtr->addRandomEmp(sNumOfEmp);
                     }
                     else if(sType == AddEmpWithType)
                     {
@@ -201,14 +202,17 @@ bool EMS::displayMainMenu(uint16_t& sChoice)
     bool isValid = true;
     do
     {
+        std::cout << "-----------------------------------------" << std::endl;
         std::cout << "Welcome to Employee Management System" << std::endl;
         std::cout << "1. Add an Employee" << std::endl;
         std::cout << "2. Remove an Employee" << std::endl;
         std::cout << "3. Employee Details" << std::endl;
         std::cout << "4. Others" << std::endl;
         std::cout << "5. Exit" << std::endl;
+        std::cout << "-----------------------------------------" << std::endl;
         std::cout << "Enter your choice: ";
         std::cin >> sChoice;
+        std::cout << "-----------------------------------------" << std::endl;
         if(validCheck(std::cin) == false)
         {
             isValid = false;
@@ -241,17 +245,20 @@ bool EMS::displayMainMenu(uint16_t& sChoice)
     }
     return true;
 }
-EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam)
+EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, uint16_t& numOfEmp)
 {
     bool isValid = true;
     do
     {
+        std::cout << "-----------------------------------------" << std::endl;
         std::cout << "Add an Employee" << std::endl;
         std::cout << "1. Add an Employee at Random" << std::endl;
         std::cout << "2. Add an Employee (F/C/I)" << std::endl;
         std::cout << "3. Back to Main Menu" << std::endl;
+        std::cout << "-----------------------------------------" << std::endl;
         std::cout << "Enter your choice: ";
         std::cin >> sChoiceParam;
+        std::cout << "-----------------------------------------" << std::endl;
         if(validCheck(std::cin) == false)
         {
             isValid = false;
@@ -259,6 +266,17 @@ EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::E
         else
         {
             isValid = true;
+            if(sChoiceParam == 1)
+            {
+                std::cout << "---------------------------------------------------" << std::endl;
+                std::cout << "Enter the Num of random emp you want to create: ";
+                std::cin >> numOfEmp;
+                std::cout << "---------------------------------------------------" << std::endl;
+                if(validCheck(std::cin) == false)
+                {
+                    isValid = false;
+                }
+            }
         }
     } while (isValid == false || sChoiceParam > 3 || sChoiceParam == 0);
     switch(sChoiceParam)
@@ -283,6 +301,7 @@ EMS::Opeartion EMS::displayEmployeeDetailsMenu(uint16_t& sChoiceParam, EmployeeI
     bool isValid = true;
     do
     {
+        std::cout << "-----------------------------------------" << std::endl;
         std::cout << "Employee Details" << std::endl;
         std::cout << "1. All Employees Summary" << std::endl;
         std::cout << "2. Employee Summary (F/C/I)" << std::endl;
@@ -290,8 +309,10 @@ EMS::Opeartion EMS::displayEmployeeDetailsMenu(uint16_t& sChoiceParam, EmployeeI
         std::cout << "4. Employee Summary (A/I/R)" << std::endl;
         std::cout << "5. Display Employee Details" << std::endl;
         std::cout << "6. Back to Main Menu" << std::endl;
+        std::cout << "-----------------------------------------" << std::endl;
         std::cout << "Enter your choice: ";
         std::cin >> sChoiceParam;
+        std::cout << "-----------------------------------------" << std::endl;
         if(validCheck(std::cin) == false)
         {
             isValid = false;
@@ -334,14 +355,17 @@ EMS::Opeartion EMS::displayOthersMenu(uint16_t& sChoiceParam, std::string& sEmpI
     bool isValid = true;
     do
     {
+        std::cout << "----------------------------------------------------------------" << std::endl;
         std::cout << "Others" << std::endl;
         std::cout << "1. Add 'n' number of leaves to all the Full-Time employees" << std::endl;
         std::cout << "2. Convert an Intern to Full-Time employee" << std::endl;
         std::cout << "3. Search an Employee by ID" << std::endl;
         std::cout << "4. Search an Employee by Name" << std::endl;
         std::cout << "5. Back to Main Menu" << std::endl;
+        std::cout << "----------------------------------------------------------------" << std::endl;
         std::cout << "Enter your choice: ";
         std::cin >> sChoiceParam;
+        std::cout << "----------------------------------------------------------------" << std::endl;
         if(validCheck(std::cin) == false)
         {
             isValid = false;

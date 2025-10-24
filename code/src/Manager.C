@@ -3,8 +3,8 @@
 
 Manager* Manager::mOwnPtr = nullptr;
 
-Manager::Manager(std::string companyNameParam) : mCompanyName(companyNameParam), 
-mEmployeeList(nullptr), mResignedEmployeeList(nullptr), mSizeOfFullTimeEmployee(0), 
+Manager::Manager(std::string companyNameParam) : mCompanyName(companyNameParam),
+mEmployeeList(nullptr), mResignedEmployeeList(nullptr), mSizeOfFullTimeEmployee(0),
 mSizeOfInternEmployee(0), mSizeOfContractualEmployee(0)
 {
 
@@ -41,7 +41,7 @@ Manager* Manager::getInstance(const std::string& companyNameParam, std::string_v
     if(nullptr==mOwnPtr)
     {
         mOwnPtr = new Manager(companyNameParam);
-        
+
         std::cout << "Adding Credentials" << std::endl;
         mOwnPtr->addCredentials(userNameParam, PassParam);
         //std::cout<< "Manager instance created for company: " << companyNameParam << " To get the instance again, please provide credentials. If not set call default credential" << std::endl;
@@ -65,40 +65,43 @@ void Manager::addCredentials(std::string_view userNameParam, std::string_view Pa
     }
 }
 
-void Manager::addEmployee(Employee::EmpType empTypeParam)
+void Manager::addEmployee(Employee::EmpType empTypeParam, uint16_t numOfEmp)
 {
-    EmployeeIF* sNewEmp = nullptr;
-    // Implementation to add employee based on empTypeParam
-    switch (empTypeParam)
+    for(uint8_t i=0; i<numOfEmp; i++)
     {
-        case Employee::EmpType::FULLTIME:
-            mSizeOfFullTimeEmployee++;
-            sNewEmp = new FullEmp();
-            break;
-        case Employee::EmpType::INTERN:
-            mSizeOfInternEmployee++;
-            sNewEmp = new InternEmp();
-            break;
-        case Employee::EmpType::CONTRACTUAL:
-            mSizeOfContractualEmployee++;
-            sNewEmp = new ContEmp();
-            break;    
-        default:
-            std::cout << "Invalid Employee Type!" << std::endl;
-            return;
-            break;
+        EmployeeIF* sNewEmp = nullptr;
+        // Implementation to add employee based on empTypeParam
+        switch (empTypeParam)
+        {
+            case Employee::EmpType::FULLTIME:
+                mSizeOfFullTimeEmployee++;
+                sNewEmp = new FullEmp();
+                break;
+            case Employee::EmpType::INTERN:
+                mSizeOfInternEmployee++;
+                sNewEmp = new InternEmp();
+                break;
+            case Employee::EmpType::CONTRACTUAL:
+                mSizeOfContractualEmployee++;
+                sNewEmp = new ContEmp();
+                break;
+            default:
+                std::cout << "Invalid Employee Type!" << std::endl;
+                return;
+                break;
+        }
+        if(nullptr==mEmployeeList)
+        {
+            mEmployeeList = new EDLL<EmployeeIF*>(1, sNewEmp);
+            continue;
+        }
+        mEmployeeList->pushBack(sNewEmp);
     }
-    if(nullptr==mEmployeeList)
-    {
-        mEmployeeList = new EDLL<EmployeeIF*>(1, sNewEmp);
-        return;
-    }
-    mEmployeeList->pushBack(sNewEmp);
 }
 
-void Manager::addRandomEmp(void)
+void Manager::addRandomEmp(uint16_t numOfEmp)
 {
-    addEmployee(static_cast<Employee::EmpType>(rand() % 3));
+    addEmployee(static_cast<Employee::EmpType>(rand() % 3),numOfEmp);
 }
 
 void Manager::removeEmployee(const std::string& empIDParam)
