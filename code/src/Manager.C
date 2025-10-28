@@ -65,43 +65,43 @@ void Manager::addCredentials(std::string_view userNameParam, std::string_view Pa
     }
 }
 
-void Manager::addEmployee(Employee::EmpType empTypeParam, uint16_t numOfEmp)
+void Manager::addEmployee(Employee::EmpType empTypeParam)
 {
-    for(uint8_t i=0; i<numOfEmp; i++)
+    EmployeeIF* sNewEmp = nullptr;
+    // Implementation to add employee based on empTypeParam
+    switch (empTypeParam)
     {
-        EmployeeIF* sNewEmp = nullptr;
-        // Implementation to add employee based on empTypeParam
-        switch (empTypeParam)
-        {
-            case Employee::EmpType::FULLTIME:
-                mSizeOfFullTimeEmployee++;
-                sNewEmp = new FullEmp();
-                break;
-            case Employee::EmpType::INTERN:
-                mSizeOfInternEmployee++;
-                sNewEmp = new InternEmp();
-                break;
-            case Employee::EmpType::CONTRACTUAL:
-                mSizeOfContractualEmployee++;
-                sNewEmp = new ContEmp();
-                break;
-            default:
-                std::cout << "Invalid Employee Type!" << std::endl;
-                return;
-                break;
-        }
-        if(nullptr==mEmployeeList)
-        {
-            mEmployeeList = new EDLL<EmployeeIF*>(1, sNewEmp);
-            continue;
-        }
-        mEmployeeList->pushBack(sNewEmp);
+        case Employee::EmpType::FULLTIME:
+            mSizeOfFullTimeEmployee++;
+            sNewEmp = new FullEmp();
+            break;
+        case Employee::EmpType::INTERN:
+            mSizeOfInternEmployee++;
+            sNewEmp = new InternEmp();
+            break;
+        case Employee::EmpType::CONTRACTUAL:
+            mSizeOfContractualEmployee++;
+            sNewEmp = new ContEmp();
+            break;
+        default:
+            std::cout << "Invalid Employee Type!" << std::endl;
+            return;
+            break;
     }
+    if(nullptr==mEmployeeList)
+    {
+        mEmployeeList = new EDLL<EmployeeIF*>(1, sNewEmp);
+        return;
+    }
+    mEmployeeList->pushBack(sNewEmp);
 }
 
 void Manager::addRandomEmp(uint16_t numOfEmp)
 {
-    addEmployee(static_cast<Employee::EmpType>(rand() % 3),numOfEmp);
+    for(uint8_t i=0; i<numOfEmp; i++)
+    {
+        addEmployee(static_cast<Employee::EmpType>(rand() % 3));
+    }
 }
 
 void Manager::removeEmployee(const std::string& empIDParam)
@@ -221,6 +221,11 @@ void Manager::displayAllEmployee(void)
         }
         std::cout << "\n";
     }
+}
+
+bool Manager::isEmpEmpty(void)
+{
+    return ((nullptr == mEmployeeList) || mEmployeeList->empty());
 }
 
 void Manager::searchWithID(const std::string& empIDParam)

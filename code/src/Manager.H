@@ -31,7 +31,7 @@ class Manager
 
     static Manager* getInstance(const std::string& companyNameParam, std::string_view userNameParam = "admin", std::string_view PassParam = "admin");
     void addCredentials(std::string_view userNameParam, std::string_view PassParam);
-    void addEmployee(Employee::EmpType empTypeParam, uint16_t numOfEmp=1);
+    void addEmployee(Employee::EmpType empTypeParam);
     void addRandomEmp(uint16_t numOfEmp);
     void removeEmployee(const std::string& empIDParam);
     void displayEmployeeType(Employee::EmpType empTypeParam);
@@ -43,6 +43,7 @@ class Manager
     void searchWithName(const std::string& sEmpNameParam) const;
     void addLeavesToAll(const uint8_t& leavesParam);
     void conv2Full(const std::string& empIDParam);
+    bool isEmpEmpty(void);
 
     private:
     Manager(std::string companyNameParam);

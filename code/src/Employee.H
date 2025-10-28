@@ -23,6 +23,7 @@ class Employee : public EmployeeIF
     void setRandomDoj(void);
     void changeIdwithEmpType(void);
     void setRandomGender(void);
+    void setRandomDOB(void);
 
     protected:
     void getTodayDate(std::string& dateParam);

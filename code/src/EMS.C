@@ -23,7 +23,7 @@ void EMS::handleMenu(void)
             case AddAnEmployee:
                 {
                     EmployeeIF::EmpType sEmpType;
-                    uint16_t sNumOfEmp = 0;
+                    int16_t sNumOfEmp = 0;
                     Opeartion sType = displayAddEmployeeMenu(sChoice,sEmpType,sNumOfEmp);
                     if(sType == AddEmpRandom)
                     {
@@ -37,6 +37,11 @@ void EMS::handleMenu(void)
                 break;
             case RemoveAnEmployee:
                 {
+                    if(mManagerPtr->isEmpEmpty())
+                    {
+                        printf("There is no Emp found, So please add an employee\n");
+                        break;
+                    }
                     std::string sId;
                     std::cout << "Enter the Emp Id: \n";
                     std::getline(std::cin>>std::ws,sId);
@@ -45,6 +50,11 @@ void EMS::handleMenu(void)
                 break;
             case EmployeeDetails:
                 {
+                    if(mManagerPtr->isEmpEmpty())
+                    {
+                        printf("There is no Emp found, So please add an employee\n");
+                        break;
+                    }
                     EmployeeIF::EmpType sEmpType;
                     Employee::EmpStatus sEmpStatus;
                     EmployeeIF::EmpGender sEmpGender;
@@ -74,6 +84,11 @@ void EMS::handleMenu(void)
                 break;
             case Other:
                 {
+                    if(mManagerPtr->isEmpEmpty())
+                    {
+                        printf("There is no Emp found, So please add an employee\n");
+                        break;
+                    }
                     std::string sEmpName,sEmpId;
                     Opeartion sType = displayOthersMenu(sChoice,sEmpId,sEmpName);
                     if(sType == AddnNumLeaves)
@@ -245,7 +260,7 @@ bool EMS::displayMainMenu(uint16_t& sChoice)
     }
     return true;
 }
-EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, uint16_t& numOfEmp)
+EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, int16_t& numOfEmp)
 {
     bool isValid = true;
     do
@@ -275,6 +290,11 @@ EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::E
                 if(validCheck(std::cin) == false)
                 {
                     isValid = false;
+                }
+                if(numOfEmp <= 0)
+                {
+                    isValid = false;
+                    std::cout << "Please enter a positive or valid number\n";
                 }
             }
         }
