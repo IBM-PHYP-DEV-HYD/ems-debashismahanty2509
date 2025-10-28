@@ -12,7 +12,7 @@
 TARGET  = ems
 
 CC      = g++
-CCFLAGS = -Wall -std=c++1z
+CCFLAGS = -Wall -std=c++1z -g
 SRCDIR  = ./src
 OBJDIR  = ./obj
 BINDIR  = ./bin
