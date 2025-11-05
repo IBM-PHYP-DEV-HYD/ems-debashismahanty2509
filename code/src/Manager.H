@@ -15,40 +15,41 @@ template<class T> class Node;
 class Manager
 {
     public:
-    virtual ~Manager();
+        virtual ~Manager();
 
-    std::string mCompanyName;
-    std::string* mUserName=nullptr;
-    std::string* mPassword=nullptr;
-    EDLL<EmployeeIF*>* mEmployeeList=nullptr;
-    EDLL<EmployeeIF*>* mResignedEmployeeList=nullptr;
+        std::string mCompanyName;
+        std::string* mUserName=nullptr;
+        std::string* mPassword=nullptr;
+        EDLL<EmployeeIF*>* mEmployeeList=nullptr;
+        EDLL<EmployeeIF*>* mResignedEmployeeList=nullptr;
 
-    size_t mSizeOfFullTimeEmployee=0;
-    size_t mSizeOfInternEmployee=0;
-    size_t mSizeOfContractualEmployee=0;
+        size_t mSizeOfFullTimeEmployee=0;
+        size_t mSizeOfInternEmployee=0;
+        size_t mSizeOfContractualEmployee=0;
 
 
 
-    static Manager* getInstance(const std::string& companyNameParam, std::string_view userNameParam = "admin", std::string_view PassParam = "admin");
-    void addCredentials(std::string_view userNameParam, std::string_view PassParam);
-    void addEmployee(Employee::EmpType empTypeParam);
-    void addRandomEmp(uint16_t numOfEmp);
-    void removeEmployee(const std::string& empIDParam);
-    void displayEmployeeType(Employee::EmpType empTypeParam);
-    void displayResignedEmployeeList(void);
-    void displayAllEmployee(void);
-    void searchWithID(const std::string& empIDParam);
-    void searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam);
-    void searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam);
-    void searchWithName(const std::string& sEmpNameParam) const;
-    void addLeavesToAll(const uint8_t& leavesParam);
-    void conv2Full(const std::string& empIDParam);
-    bool isEmpEmpty(void);
+        static Manager* getInstance(const std::string& companyNameParam, std::string_view userNameParam = "admin", std::string_view PassParam = "admin");
+        void addCredentials(std::string_view userNameParam, std::string_view PassParam);
+        void addEmployee(Employee::EmpType empTypeParam);
+        void addRandomEmp(uint16_t numOfEmp);
+        void removeEmployee(const std::string& empIDParam);
+        void displayEmployeeType(Employee::EmpType empTypeParam);
+        void displayResignedEmployeeList(void);
+        void displayAllEmployee(void);
+        void searchWithID(const std::string& empIDParam);
+        void searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam);
+        void searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam);
+        void searchWithName(const std::string& sEmpNameParam);
+        void addLeavesToAll(const uint8_t& leavesParam);
+        void conv2Full(const std::string& empIDParam);
+        bool isEmpEmpty(void);
 
     private:
-    Manager(std::string companyNameParam);
-    static Manager* mOwnPtr;
-    EmployeeIF* searchIDIntern(const std::string& empIdParam);
+        Manager(std::string companyNameParam);
+        static Manager* mOwnPtr;
+        EmployeeIF* searchIDIntern(const std::string& empIdParam);
+        void designForAll(void);
 
 };
 #endif

@@ -1,5 +1,5 @@
 #include "Manager.H"
-
+#include <iomanip>
 
 Manager* Manager::mOwnPtr = nullptr;
 
@@ -146,6 +146,7 @@ void Manager::displayEmployeeType(Employee::EmpType empTypeParam)
         std::cout << "No employees to display!" << std::endl;
         return;
     }
+    designForAll();
     for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
@@ -166,6 +167,29 @@ void Manager::displayEmployeeType(Employee::EmpType empTypeParam)
             }
         }
     }
+}
+
+void Manager::designForAll(void)
+{
+    using namespace std;  // only applies inside this fuction()
+    cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+    cout << left
+        << "| " << setw(EmployeeIF::Name) << "Name"
+        << "| " << setw(EmployeeIF::Id) << "ID"
+        << "| " << setw(EmployeeIF::Gender) << "Gender"
+        << "| " << setw(EmployeeIF::Dob) << "DOB"
+        << "| " << setw(EmployeeIF::Doj) << "DOJ"
+        << "| " << setw(EmployeeIF::Dol) << "DOL"
+        << "| " << setw(EmployeeIF::Type) << "Type"
+        << "| " << setw(EmployeeIF::Status) << "Status"
+        << "| " << setw(EmployeeIF::Clg) << "College"
+        << "| " << setw(EmployeeIF::Bnh) << "Branch"
+        << "| " << setw(EmployeeIF::CLeaves) << "Current Leaves"
+        << "| " << setw(EmployeeIF::LevApp) << "Leaves Applied"
+        << "| " << setw(EmployeeIF::Agncy) << "Agency"
+        << endl;
+    cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+    cout.unsetf(std::ios::adjustfield);
 }
 
 void Manager::displayResignedEmployeeList(void)
@@ -195,6 +219,7 @@ void Manager::displayResignedEmployeeList(void)
     }
 }
 
+
 void Manager::displayAllEmployee(void)
 {
     // Implementation to display all employees
@@ -203,6 +228,7 @@ void Manager::displayAllEmployee(void)
         std::cout << "No employees to display!" << std::endl;
         return;
     }
+    designForAll();
     for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
@@ -219,8 +245,9 @@ void Manager::displayAllEmployee(void)
         {
             std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
         }
-        std::cout << "\n";
     }
+    std::cout << "\n";
+
 }
 
 bool Manager::isEmpEmpty(void)
@@ -242,6 +269,7 @@ void Manager::searchWithID(const std::string& empIDParam)
         Employee::EmpType sEmpType = sEmp->getEmployeeType();
         if(sEmp->getID() == empIDParam)
         {
+            designForAll();
             if(sEmpType == Employee::EmpType::FULLTIME)
             {
                 std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
@@ -288,6 +316,7 @@ void Manager::searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam)
         std::cout << "No employees to search!" << std::endl;
         return;
     }
+    designForAll();
     for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
@@ -306,7 +335,6 @@ void Manager::searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam)
             {
                 std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
             }
-            return;
         }
     }
 }
@@ -319,6 +347,7 @@ void Manager::searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam)
         std::cout << "No employees to search!" << std::endl;
         return;
     }
+    designForAll();
     for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
@@ -337,12 +366,11 @@ void Manager::searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam)
             {
                 std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
             }
-            return;
         }
     }
 }
 
-void Manager::searchWithName(const std::string& sEmpNameParam) const
+void Manager::searchWithName(const std::string& sEmpNameParam)
 {
     // Implementation to search employee based on sEmpStatusParam
     if(nullptr==mEmployeeList || mEmployeeList->empty())
@@ -350,6 +378,7 @@ void Manager::searchWithName(const std::string& sEmpNameParam) const
         std::cout << "No employees to search!" << std::endl;
         return;
     }
+    designForAll();
     for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
@@ -368,7 +397,6 @@ void Manager::searchWithName(const std::string& sEmpNameParam) const
             {
                 std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
             }
-            return;
         }
     }
 }
@@ -404,5 +432,10 @@ void Manager::conv2Full(const std::string& empIDParam)
             return;
         }
         mEmployeeList->pushBack(sNewEmp);
+        removeEmployee(empIDParam);
+    }
+    else
+    {
+        std::cout << "We did not found any employee with this id having a Intern type\n";
     }
 }

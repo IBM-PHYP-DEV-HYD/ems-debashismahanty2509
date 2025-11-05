@@ -1,4 +1,5 @@
 #include "ContEmp.H"
+#include "iomanip"
 
 size_t ContEmp::mSizeOfContEmployee = 0;
 ContEmp::ContEmp() : Employee(EmployeeIF::EmpType::CONTRACTUAL)
@@ -45,7 +46,13 @@ std::string_view ContEmp::getAgency(void) const
 std::ostream& operator<<(std::ostream& osParam , const ContEmp* emp)
 {
     osParam << static_cast<const Employee*>(emp);
-    osParam << "Agency: " << emp->getAgency() << std::endl;
+    osParam << std::left;
+    osParam << "| " << std::setw(EmployeeIF::Clg) << "--"; 
+    osParam << "| " << std::setw(EmployeeIF::Bnh) << "--";
+    osParam << "| " << std::setw(EmployeeIF::CLeaves) << "--";
+    osParam << "| " << std::setw(EmployeeIF::LevApp) << "--";
+    osParam << "| " << std::setw(EmployeeIF::Agncy) << emp->getAgency();
+    osParam.unsetf(std::ios::adjustfield);
     return osParam;
 }
 

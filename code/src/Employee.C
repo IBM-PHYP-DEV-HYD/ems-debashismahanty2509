@@ -1,4 +1,5 @@
 #include "Employee.H"
+#include "iomanip"
 
 size_t Employee::mMemberNumbers = 0;
 std::string Employee::mFirstNames[10] = {"John", "Jane", "Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Hank"};
@@ -22,7 +23,7 @@ void Employee::setRandomDOB(void)
     mDOB.length() == 1 ? mDOB = "0" + mDOB + "-" : mDOB += "-";
     mDOB += std::to_string(rand() % 11 + 1);
     mDOB.length() == 4 ? mDOB = mDOB.substr(0, 3) + "0" + mDOB.substr(3, 1) + "-" : mDOB += "-";
-    mDOB += std::to_string(std::stoi(sTodayDate.substr(6, 4)) - (rand() % 50));
+    mDOB += std::to_string(std::stoi(sTodayDate.substr(6, 4)) - 20 - (rand() % 40));
 }
 
 Employee::Employee(EmpType empTypeParam, EmpStatus empStatusParam) : mEmployeeType(empTypeParam), mEmployeeStatus(empStatusParam)
@@ -338,44 +339,46 @@ void Employee::setRandomDoj(void)
 
 std::ostream &operator<<(std::ostream &osParam, const Employee *emp)
 {
-    osParam << "Name: " << emp->mName << std::endl;
-    osParam << "ID: " << emp->mID << std::endl;
-    osParam << "Gender: " << emp->getGender() << std::endl;
-    osParam << "DOB: " << emp->mDOB << std::endl;
-    osParam << "DOJ: " << emp->mDOJ << std::endl;
-    osParam << "DOL: " << emp->mDOL << std::endl;
-    osParam << "Employee Type: ";
+    osParam << std::left
+            << "| " << std::setw(EmployeeIF::Name) << emp->mName
+            << "| " << std::setw(EmployeeIF::Id) << emp->mID
+            << "| " << std::setw(EmployeeIF::Gender) << emp->getGender()
+            << "| " << std::setw(EmployeeIF::Dob) << emp->mDOB
+            << "| " << std::setw(EmployeeIF::Doj) << emp->mDOJ
+            << "| " << std::setw(EmployeeIF::Dol) << emp->mDOL
+            << "| " << std::setw(EmployeeIF::Type);
     switch (emp->mEmployeeType)
     {
     case EmployeeIF::EmpType::FULLTIME:
-        osParam << "Full Time" << std::endl;
+        osParam << "Full Time";
         break;
     case EmployeeIF::EmpType::INTERN:
-        osParam << "Intern" << std::endl;
+        osParam << "Intern";
         break;
     case EmployeeIF::EmpType::CONTRACTUAL:
-        osParam << "Contractual" << std::endl;
+        osParam << "Contractual";
         break;
     default:
-        osParam << "None" << std::endl;
+        osParam << "None";
         break;
     }
-    osParam << "Employee Status: ";
+    osParam << "| " << std::setw(EmployeeIF::Status);
     switch (emp->mEmployeeStatus)
     {
     case EmployeeIF::EmpStatus::ACTIVE:
-        osParam << "Active" << std::endl;
+        osParam << "Active";
         break;
     case EmployeeIF::EmpStatus::INACTIVE:
-        osParam << "Inactive" << std::endl;
+        osParam << "Inactive";
         break;
     case EmployeeIF::EmpStatus::RESIGNED:
-        osParam << "Resigned" << std::endl;
+        osParam << "Resigned";
         break;
     default:
-        osParam << "None" << std::endl;
+        osParam << "None";
         break;
     }
+    osParam.unsetf(std::ios::adjustfield);
     return osParam;
 }
 

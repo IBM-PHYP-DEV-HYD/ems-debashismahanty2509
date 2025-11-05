@@ -1,4 +1,5 @@
 #include "InternEmp.H"
+#include "iomanip"
 
 size_t InternEmp::mSizeOfInternEmployee = 0;
 
@@ -44,8 +45,13 @@ size_t InternEmp::getEmployeeCount()
 std::ostream& operator<<(std::ostream& osParam, const InternEmp* emp)
 {
     osParam << static_cast<const Employee*>(emp);
-    osParam << "College= " << emp->getCollege() << std::endl;
-    osParam <<  "Branch=" << emp->getBranch() << std::endl;
+    osParam << std::left;
+    osParam << "| " << std::setw(EmployeeIF::Clg) << emp->getCollege(); 
+    osParam << "| " << std::setw(EmployeeIF::Bnh) << emp->getBranch();
+    osParam << "| " << std::setw(EmployeeIF::CLeaves) << "--";
+    osParam << "| " << std::setw(EmployeeIF::LevApp) << "--";
+    osParam << "| " << std::setw(EmployeeIF::Agncy) << "--";
+    osParam.unsetf(std::ios::adjustfield);
     return osParam;
 }
 

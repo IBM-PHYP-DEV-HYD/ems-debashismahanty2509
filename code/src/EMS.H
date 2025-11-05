@@ -41,8 +41,8 @@ class EMS
     void inputEmpStatus(EmployeeIF::EmpStatus& sEmpStatusParam);
     void inputEmpGender(EmployeeIF::EmpGender& sEmpGenderParam);
     bool displayMainMenu(uint16_t& sChoice);
-    Opeartion displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, int16_t& numOfEmp);
+    Opeartion displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, int16_t& numOfEmpParam);
     Opeartion displayEmployeeDetailsMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, EmployeeIF::EmpStatus& sEmpStatusParam, EmployeeIF::EmpGender& sEmpGenderParam, std::string& sEmpIdParam);
-    Opeartion displayOthersMenu(uint16_t& sChoiceParam, std::string& sEmpIdParam, std::string& sEmpName);
+    Opeartion displayOthersMenu(uint16_t& sChoiceParam, std::string& sEmpIdParam, std::string& sEmpName,int16_t& numOfLeavesParam);
 };
 #endif

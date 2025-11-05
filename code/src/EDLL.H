@@ -2,7 +2,7 @@
 #define _EDLL_H_
 #include <iostream>
 #include "Deque.H"
-//class Declaration 
+//class Declaration
 template<class T>class Deque;
 
 /**
@@ -70,6 +70,14 @@ template<class T> void EDLL<T>::remElementMiddle(size_t posParam)
         this->mHead = this->mTail = nullptr;
         this->mSize--;
         return;
+    }
+    else if(1 == posParam)
+    {
+        Node<T> *sItr = this->mHead;
+        this->mHead = this->mHead->mNextNode;
+        this->mHead->mPrevNode = nullptr;
+        this->mSize--;
+        delete sItr;
     }
     else
     {

@@ -51,6 +51,22 @@ class EmployeeIF
         RANDOM = 0,
         USERINPUT = 1
     };
+    enum WidthPrint
+    {
+        Name    = 15,
+        Id      = 12,
+        Gender  = 10,
+        Dob     = 12,
+        Doj     = 12,
+        Dol     = 12,
+        Type    = 12,
+        Status  = 10,
+        Clg     = 15,
+        Bnh     = 11,
+        CLeaves = 18,
+        LevApp  = 18,
+        Agncy   = 8,
+    };
 
 
     virtual ~EmployeeIF() = default;

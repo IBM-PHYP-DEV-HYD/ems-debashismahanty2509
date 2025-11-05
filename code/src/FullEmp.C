@@ -1,5 +1,7 @@
 #include "FullEmp.H"
 #include "InternEmp.H"
+#include "iomanip"
+#include "EmployeeIF.H"
 
 size_t FullEmp::mSizeOfFullEmployee = 0;
 uint8_t FullEmp::mMaxLeaves = 22;
@@ -33,7 +35,7 @@ void FullEmp::genericConstCall(void)
         {
             mCurrentLeaves = mMaxLeaves;
         }
-        
+
     }
 }
 
@@ -97,8 +99,13 @@ void FullEmp::setMaxLeaves(const uint8_t& maxLeavesParam)
 std::ostream& operator<<(std::ostream& osParam , const FullEmp* empParam)
 {
     osParam << static_cast<const Employee*>(empParam);
-    osParam << "Current Leaves: " << (int)empParam->mCurrentLeaves << std::endl;
-    osParam << "Leaves Applied: " << (int)empParam->mLeaveApplied << std::endl;
+    osParam << std::left;
+    osParam << "| " << std::setw(EmployeeIF::Clg) << "--";
+    osParam << "| " << std::setw(EmployeeIF::Bnh) << "--";
+    osParam << "| " << std::setw(EmployeeIF::CLeaves) << (int)empParam->mCurrentLeaves;
+    osParam << "| " << std::setw(EmployeeIF::LevApp) << (int)empParam->mLeaveApplied;
+    osParam << "| " << std::setw(EmployeeIF::Agncy) << "--";
+    osParam.unsetf(std::ios::adjustfield);
     return osParam;
 }
 
@@ -108,7 +115,24 @@ void convertIntern2FullTime(FullEmp* fullEmpParam, const Employee* empParam)
     sEmpcastFull->mName = empParam->mName;
     sEmpcastFull->mGender = empParam->mGender;
     sEmpcastFull->mDOB = empParam->mDOB;
-    sEmpcastFull->mDOJ = empParam->mDOJ;
+    std::string_view sDOJ = sEmpcastFull->mDOJ = empParam->mDOJ;
 
-    
+    std::string sTodaysDate;
+    fullEmpParam->getTodayDate(sTodaysDate);
+    int8_t sLeftMonth;
+    if(sDOJ != "NA" && sDOJ.length() == 10)
+    {
+        int sTodayYear = std::stoi(std::string(sTodaysDate.substr(6,4)));
+        int sDOJYear = std::stoi(std::string(sDOJ.substr(6,4)));
+        if(sTodayYear == sDOJYear)
+        {
+            sLeftMonth = 12 - std::stoi(std::string(sDOJ.substr(3,2)));
+            fullEmpParam->mCurrentLeaves = (sLeftMonth * fullEmpParam->mMaxLeaves) / 12;
+        }
+        else
+        {
+            fullEmpParam->mCurrentLeaves = fullEmpParam->mMaxLeaves;
+        }
+
+    }
 }

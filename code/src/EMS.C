@@ -90,10 +90,11 @@ void EMS::handleMenu(void)
                         break;
                     }
                     std::string sEmpName,sEmpId;
-                    Opeartion sType = displayOthersMenu(sChoice,sEmpId,sEmpName);
+                    int16_t numOfLeaves = 0;
+                    Opeartion sType = displayOthersMenu(sChoice,sEmpId,sEmpName,numOfLeaves);
                     if(sType == AddnNumLeaves)
                     {
-                        mManagerPtr->addLeavesToAll(1);
+                        mManagerPtr->addLeavesToAll(numOfLeaves);
                     }
                     else if(sType == ConvIntern2Full)
                     {
@@ -260,7 +261,7 @@ bool EMS::displayMainMenu(uint16_t& sChoice)
     }
     return true;
 }
-EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, int16_t& numOfEmp)
+EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, int16_t& numOfEmpParam)
 {
     bool isValid = true;
     do
@@ -285,13 +286,13 @@ EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::E
             {
                 std::cout << "---------------------------------------------------" << std::endl;
                 std::cout << "Enter the Num of random emp you want to create: ";
-                std::cin >> numOfEmp;
+                std::cin >> numOfEmpParam;
                 std::cout << "---------------------------------------------------" << std::endl;
                 if(validCheck(std::cin) == false)
                 {
                     isValid = false;
                 }
-                if(numOfEmp <= 0)
+                if(numOfEmpParam <= 0)
                 {
                     isValid = false;
                     std::cout << "Please enter a positive or valid number\n";
@@ -370,7 +371,7 @@ EMS::Opeartion EMS::displayEmployeeDetailsMenu(uint16_t& sChoiceParam, EmployeeI
     }
     return MainMenu;
 }
-EMS::Opeartion EMS::displayOthersMenu(uint16_t& sChoiceParam, std::string& sEmpIdParam, std::string& sEmpName)
+EMS::Opeartion EMS::displayOthersMenu(uint16_t& sChoiceParam, std::string& sEmpIdParam, std::string& sEmpName, int16_t& numOfLeavesParam)
 {
     bool isValid = true;
     do
@@ -393,6 +394,22 @@ EMS::Opeartion EMS::displayOthersMenu(uint16_t& sChoiceParam, std::string& sEmpI
         else
         {
             isValid = true;
+            if(sChoiceParam == 1)
+            {
+                std::cout << "---------------------------------------------------" << std::endl;
+                std::cout << "Enter the Num of leaves you want to add: ";
+                std::cin >> numOfLeavesParam;
+                std::cout << "---------------------------------------------------" << std::endl;
+                if(validCheck(std::cin) == false)
+                {
+                    isValid = false;
+                }
+                if(numOfLeavesParam <= 0 || numOfLeavesParam > 8)
+                {
+                    isValid = false;
+                    std::cout << "Please enter a positive or valid number it should not exceed 30 leaves in total\n";
+                }
+            }
         }
     } while (isValid == false || sChoiceParam > 5);
     if(sChoiceParam == 1)
