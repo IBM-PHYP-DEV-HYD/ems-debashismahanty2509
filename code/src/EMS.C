@@ -16,7 +16,7 @@ void EMS::handleMenu(void)
 {
     //NULL check
     uint16_t sChoice = 0;
-    while(displayMainMenu(sChoice) && sChoice != Exit)
+    while(pDisplayMainMenu(sChoice) && sChoice != Exit)
     {
         switch(sChoice)
         {
@@ -24,7 +24,7 @@ void EMS::handleMenu(void)
                 {
                     EmployeeIF::EmpType sEmpType;
                     int16_t sNumOfEmp = 0;
-                    Opeartion sType = displayAddEmployeeMenu(sChoice,sEmpType,sNumOfEmp);
+                    Opeartion sType = pDisplayAddEmployeeMenu(sChoice,sEmpType,sNumOfEmp);
                     if(sType == AddEmpRandom)
                     {
                         mManagerPtr->addRandomEmp(sNumOfEmp);
@@ -59,7 +59,7 @@ void EMS::handleMenu(void)
                     Employee::EmpStatus sEmpStatus;
                     EmployeeIF::EmpGender sEmpGender;
                     std::string sEmpId;
-                    Opeartion sType = displayEmployeeDetailsMenu(sChoice,sEmpType,sEmpStatus,sEmpGender,sEmpId);
+                    Opeartion sType = pDisplayEmployeeDetailsMenu(sChoice,sEmpType,sEmpStatus,sEmpGender,sEmpId);
                     if(sType == AllEmpSummary)
                     {
                         mManagerPtr->displayAllEmployee();
@@ -91,7 +91,7 @@ void EMS::handleMenu(void)
                     }
                     std::string sEmpName,sEmpId;
                     int16_t numOfLeaves = 0;
-                    Opeartion sType = displayOthersMenu(sChoice,sEmpId,sEmpName,numOfLeaves);
+                    Opeartion sType = pDisplayOthersMenu(sChoice,sEmpId,sEmpName,numOfLeaves);
                     if(sType == AddnNumLeaves)
                     {
                         mManagerPtr->addLeavesToAll(numOfLeaves);
@@ -115,7 +115,7 @@ void EMS::handleMenu(void)
         }
     }
 }
-void EMS::inputEmpType(EmployeeIF::EmpType& sEmpTypeParam)
+void EMS::pInputEmpType(EmployeeIF::EmpType& sEmpTypeParam)
 {
     bool isValid = true;
     char sInput;
@@ -149,7 +149,7 @@ void EMS::inputEmpType(EmployeeIF::EmpType& sEmpTypeParam)
         sEmpTypeParam = EmployeeIF::INTERN;
     }
 }
-void EMS::inputEmpStatus(EmployeeIF::EmpStatus& sEmpStatusParam)
+void EMS::pInputEmpStatus(EmployeeIF::EmpStatus& sEmpStatusParam)
 {
     bool isValid = true;
     char sInput;
@@ -183,7 +183,7 @@ void EMS::inputEmpStatus(EmployeeIF::EmpStatus& sEmpStatusParam)
         sEmpStatusParam = EmployeeIF::RESIGNED;
     }
 }
-void EMS::inputEmpGender(EmployeeIF::EmpGender& sEmpGenderParam)
+void EMS::pInputEmpGender(EmployeeIF::EmpGender& sEmpGenderParam)
 {
     bool isValid = true;
     char sInput;
@@ -213,7 +213,7 @@ void EMS::inputEmpGender(EmployeeIF::EmpGender& sEmpGenderParam)
         sEmpGenderParam = EmployeeIF::Female;
     }
 }
-bool EMS::displayMainMenu(uint16_t& sChoice)
+bool EMS::pDisplayMainMenu(uint16_t& sChoiceParam)
 {
     bool isValid = true;
     do
@@ -227,7 +227,7 @@ bool EMS::displayMainMenu(uint16_t& sChoice)
         std::cout << "5. Exit" << std::endl;
         std::cout << "-----------------------------------------" << std::endl;
         std::cout << "Enter your choice: ";
-        std::cin >> sChoice;
+        std::cin >> sChoiceParam;
         std::cout << "-----------------------------------------" << std::endl;
         if(validCheck(std::cin) == false)
         {
@@ -237,31 +237,31 @@ bool EMS::displayMainMenu(uint16_t& sChoice)
         {
             isValid = true;
         }
-    } while (isValid == false || sChoice > 5 || sChoice == 0);
-    if(sChoice == 5)
+    } while (isValid == false || sChoiceParam > 5 || sChoiceParam == 0);
+    if(sChoiceParam == 5)
     {
-        sChoice = Exit;
+        sChoiceParam = Exit;
         return false;
     }
-    else if(sChoice == 2)
+    else if(sChoiceParam == 2)
     {
-        sChoice = RemoveAnEmployee;
+        sChoiceParam = RemoveAnEmployee;
     }
-    else if(sChoice == 3)
+    else if(sChoiceParam == 3)
     {
-        sChoice = EmployeeDetails;
+        sChoiceParam = EmployeeDetails;
     }
-    else if(sChoice == 1)
+    else if(sChoiceParam == 1)
     {
-        sChoice = AddAnEmployee;
+        sChoiceParam = AddAnEmployee;
     }
-    else if(sChoice == 4)
+    else if(sChoiceParam == 4)
     {
-        sChoice = Other;
+        sChoiceParam = Other;
     }
     return true;
 }
-EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, int16_t& numOfEmpParam)
+EMS::Opeartion EMS::pDisplayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, int16_t& numOfEmpParam)
 {
     bool isValid = true;
     do
@@ -306,7 +306,7 @@ EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::E
             return AddEmpRandom;
             break;
         case 2:
-            inputEmpType(sEmpTypeParam);
+            pInputEmpType(sEmpTypeParam);
             return AddEmpWithType;
             break;
         case 3:
@@ -317,7 +317,7 @@ EMS::Opeartion EMS::displayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::E
     }
     return MainMenu;
 }
-EMS::Opeartion EMS::displayEmployeeDetailsMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, EmployeeIF::EmpStatus& sEmpStatusParam, EmployeeIF::EmpGender& sEmpGenderParam, std::string& sEmpIdParam)
+EMS::Opeartion EMS::pDisplayEmployeeDetailsMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, EmployeeIF::EmpStatus& sEmpStatusParam, EmployeeIF::EmpGender& sEmpGenderParam, std::string& sEmpIdParam)
 {
     bool isValid = true;
     do
@@ -350,17 +350,17 @@ EMS::Opeartion EMS::displayEmployeeDetailsMenu(uint16_t& sChoiceParam, EmployeeI
     }
     else if(sChoiceParam == 2)
     {
-        inputEmpType(sEmpTypeParam);
+        pInputEmpType(sEmpTypeParam);
         return EmpSummaryType;
     }
     else if(sChoiceParam == 3)
     {
-        inputEmpGender(sEmpGenderParam);
+        pInputEmpGender(sEmpGenderParam);
         return EmpSummaryGender;
     }
     else if(sChoiceParam == 4)
     {
-        inputEmpStatus(sEmpStatusParam);
+        pInputEmpStatus(sEmpStatusParam);
         return EmpSummaryStatus;
     }
     else if(sChoiceParam == 5)
@@ -371,7 +371,7 @@ EMS::Opeartion EMS::displayEmployeeDetailsMenu(uint16_t& sChoiceParam, EmployeeI
     }
     return MainMenu;
 }
-EMS::Opeartion EMS::displayOthersMenu(uint16_t& sChoiceParam, std::string& sEmpIdParam, std::string& sEmpName, int16_t& numOfLeavesParam)
+EMS::Opeartion EMS::pDisplayOthersMenu(uint16_t& sChoiceParam, std::string& sEmpIdParam, std::string& sEmpName, int16_t& numOfLeavesParam)
 {
     bool isValid = true;
     do

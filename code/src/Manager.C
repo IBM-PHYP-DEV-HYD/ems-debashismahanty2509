@@ -24,11 +24,11 @@ Manager::~Manager()
     }
 }
 
-Manager* Manager::getInstance(const std::string& companyNameParam, std::string_view userNameParam, std::string_view PassParam)
+Manager* Manager::getInstance(const std::string& companyNameParam, std::string_view userNameParam, std::string_view passParam)
 {
     if(nullptr != mOwnPtr && nullptr != mOwnPtr->mUserName && nullptr != mOwnPtr->mPassword)
     {
-        if(*(mOwnPtr->mUserName) == userNameParam && *(mOwnPtr->mPassword) == PassParam)
+        if(*(mOwnPtr->mUserName) == userNameParam && *(mOwnPtr->mPassword) == passParam)
         {
             return mOwnPtr;
         }
@@ -43,19 +43,19 @@ Manager* Manager::getInstance(const std::string& companyNameParam, std::string_v
         mOwnPtr = new Manager(companyNameParam);
 
         std::cout << "Adding Credentials" << std::endl;
-        mOwnPtr->addCredentials(userNameParam, PassParam);
+        mOwnPtr->addCredentials(userNameParam, passParam);
         //std::cout<< "Manager instance created for company: " << companyNameParam << " To get the instance again, please provide credentials. If not set call default credential" << std::endl;
         return mOwnPtr;
     }
     return nullptr;
 }
 
-void Manager::addCredentials(std::string_view userNameParam, std::string_view PassParam)
+void Manager::addCredentials(std::string_view userNameParam, std::string_view passParam)
 {
     if(nullptr==mUserName && nullptr==mPassword)
     {
         mUserName = new std::string(userNameParam);
-        mPassword = new std::string(PassParam);
+        mPassword = new std::string(passParam);
         return;
     }
     else
@@ -96,9 +96,9 @@ void Manager::addEmployee(Employee::EmpType empTypeParam)
     mEmployeeList->pushBack(sNewEmp);
 }
 
-void Manager::addRandomEmp(uint16_t numOfEmp)
+void Manager::addRandomEmp(uint16_t numOfEmpParam)
 {
-    for(uint8_t i=0; i<numOfEmp; i++)
+    for(uint8_t i=0; i<numOfEmpParam; i++)
     {
         addEmployee(static_cast<Employee::EmpType>(rand() % 3));
     }

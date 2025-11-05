@@ -18,7 +18,7 @@ void Employee::setRandomDOB(void)
 {
     // set a random DOB between 20 to 60 years based on todays date
     std::string sTodayDate;
-    getTodayDate(sTodayDate);
+    pGetTodayDate(sTodayDate);
     mDOB += std::to_string(rand() % 28 + 1);
     mDOB.length() == 1 ? mDOB = "0" + mDOB + "-" : mDOB += "-";
     mDOB += std::to_string(rand() % 11 + 1);
@@ -184,7 +184,7 @@ void Employee::setEmployeeType(EmpType empTypeParam)
     mEmployeeType = empTypeParam;
     changeIdwithEmpType();
     std::string sDate;
-    getTodayDate(sDate);
+    pGetTodayDate(sDate);
     setDOLBasedOnDOJ(false, sDate);
 }
 
@@ -200,11 +200,11 @@ void Employee::setDOL(const std::string &dolParam)
 void Employee::setDOJ(void)
 {
     // take today date as DOJ
-    getTodayDate(mDOJ);
+    pGetTodayDate(mDOJ);
     setDOLBasedOnDOJ(true);
 }
 
-void Employee::getTodayDate(std::string &dateParam)
+void Employee::pGetTodayDate(std::string &dateParam)
 {
     time_t sNow = time(0);
     tm *sLtm = localtime(&sNow);
@@ -269,7 +269,7 @@ void Employee::setLeavesApplied(const uint8_t &leavesParam)
     return;
 }
 
-void Employee::renewLeaveBalance(const uint8_t &carryForwardToNextYear)
+void Employee::renewLeaveBalance(const uint8_t &carryForwardToNextYearParam)
 {
     return;
 }
@@ -304,7 +304,7 @@ void Employee::setRandomDoj(void)
     {
         // Based on current date - 6 months randomly generate
         std::string sTodayDate;
-        getTodayDate(sTodayDate);
+        pGetTodayDate(sTodayDate);
         int sDay = rand() % 28;
         int sMonth = std::stoi(sTodayDate.substr(3, 2)) - rand() % 5;
         int sYear = std::stoi(sTodayDate.substr(6, 4));
@@ -321,7 +321,7 @@ void Employee::setRandomDoj(void)
     {
         // Based on current date - 6 months randomly generate
         std::string sTodayDate;
-        getTodayDate(sTodayDate);
+        pGetTodayDate(sTodayDate);
         int sDay = rand() % 28;
         int sMonth = std::stoi(sTodayDate.substr(3, 2)) - rand() % 11;
         int sYear = std::stoi(sTodayDate.substr(6, 4));
@@ -337,17 +337,17 @@ void Employee::setRandomDoj(void)
     setDOLBasedOnDOJ(true);
 }
 
-std::ostream &operator<<(std::ostream &osParam, const Employee *emp)
+std::ostream &operator<<(std::ostream &osParam, const Employee *empParam)
 {
     osParam << std::left
-            << "| " << std::setw(EmployeeIF::Name) << emp->mName
-            << "| " << std::setw(EmployeeIF::Id) << emp->mID
-            << "| " << std::setw(EmployeeIF::Gender) << emp->getGender()
-            << "| " << std::setw(EmployeeIF::Dob) << emp->mDOB
-            << "| " << std::setw(EmployeeIF::Doj) << emp->mDOJ
-            << "| " << std::setw(EmployeeIF::Dol) << emp->mDOL
+            << "| " << std::setw(EmployeeIF::Name) << empParam->mName
+            << "| " << std::setw(EmployeeIF::Id) << empParam->mID
+            << "| " << std::setw(EmployeeIF::Gender) << empParam->getGender()
+            << "| " << std::setw(EmployeeIF::Dob) << empParam->mDOB
+            << "| " << std::setw(EmployeeIF::Doj) << empParam->mDOJ
+            << "| " << std::setw(EmployeeIF::Dol) << empParam->mDOL
             << "| " << std::setw(EmployeeIF::Type);
-    switch (emp->mEmployeeType)
+    switch (empParam->mEmployeeType)
     {
     case EmployeeIF::EmpType::FULLTIME:
         osParam << "Full Time";
@@ -363,7 +363,7 @@ std::ostream &operator<<(std::ostream &osParam, const Employee *emp)
         break;
     }
     osParam << "| " << std::setw(EmployeeIF::Status);
-    switch (emp->mEmployeeStatus)
+    switch (empParam->mEmployeeStatus)
     {
     case EmployeeIF::EmpStatus::ACTIVE:
         osParam << "Active";
@@ -382,28 +382,28 @@ std::ostream &operator<<(std::ostream &osParam, const Employee *emp)
     return osParam;
 }
 
-std::istream &operator>>(std::istream &isParam, Employee *emp)
+std::istream &operator>>(std::istream &isParam, Employee *empParam)
 {
     std::cout << "Enter Name: ";
-    std::getline(std::cin >> std::ws, emp->mName);
+    std::getline(std::cin >> std::ws, empParam->mName);
 
     char sGender;
     std::cout << "Enter the Gender (M/F): ";
     std::cin >> sGender;
-    if (emp->validCheck(std::cin) == false)
+    if (empParam->validCheck(std::cin) == false)
     {
-        emp->mGender = EmployeeIF::EmpGender::None;
+        empParam->mGender = EmployeeIF::EmpGender::None;
     }
     if (sGender == 'M' || sGender == 'm')
     {
-        emp->mGender = EmployeeIF::EmpGender::Male;
+        empParam->mGender = EmployeeIF::EmpGender::Male;
     }
     else if (sGender == 'F' || sGender == 'f')
     {
-        emp->mGender = EmployeeIF::EmpGender::Female;
+        empParam->mGender = EmployeeIF::EmpGender::Female;
     }
 
     std::cout << "Enter DOB (DD-MM-YYYY): ";
-    std::getline(std::cin >> std::ws, emp->mDOB);
+    std::getline(std::cin >> std::ws, empParam->mDOB);
     return isParam;
 }

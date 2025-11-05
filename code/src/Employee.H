@@ -26,7 +26,7 @@ class Employee : public EmployeeIF
     void setRandomDOB(void);
 
     protected:
-    void getTodayDate(std::string& dateParam);
+    void pGetTodayDate(std::string& dateParam);
 
     public:
     EmpType mEmployeeType;
@@ -46,8 +46,8 @@ class Employee : public EmployeeIF
     virtual std::string getCollege(void) const;
     virtual const uint8_t getCurrentLeaves(void);
     virtual size_t getEmployeeCount();
-    friend std::ostream& operator<<(std::ostream& osParam, const Employee* emp);
-    friend std::istream& operator>>(std::istream& isParam, Employee* emp);
+    friend std::ostream& operator<<(std::ostream& osParam, const Employee* empParam);
+    friend std::istream& operator>>(std::istream& isParam, Employee* empParam);
     friend void convertIntern2FullTime(FullEmp* fullEmpParam, const Employee* empParam);
 
 
@@ -66,7 +66,7 @@ class Employee : public EmployeeIF
     void setEmployeeStatus(EmpStatus empStatusParam);
     void setDOL(const std::string& dolParam);
     virtual void setLeavesApplied(const uint8_t& leavesParam);
-    virtual void renewLeaveBalance(const uint8_t& carryForwardToNextYear);
+    virtual void renewLeaveBalance(const uint8_t& carryForwardToNextYearParam);
     virtual void addLeavesToAll(const uint8_t& leavesParam);
 
 

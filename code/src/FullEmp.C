@@ -20,7 +20,7 @@ void FullEmp::genericConstCall(void)
     mSizeOfFullEmployee++;
     std::string_view sDOJ = getDOJ();
     std::string sTodaysDate;
-    getTodayDate(sTodaysDate);
+    pGetTodayDate(sTodaysDate);
     int8_t sLeftMonth;
     if(sDOJ != "NA" && sDOJ.length() == 10)
     {
@@ -65,22 +65,22 @@ void FullEmp::setLeavesApplied(const uint8_t& leavesParam)
     mCurrentLeaves -= leavesParam;
 }
 
-void FullEmp::renewLeaveBalance(const uint8_t& carryForwardToNextYear)
+void FullEmp::renewLeaveBalance(const uint8_t& carryForwardToNextYearParam)
 {
-    if(carryForwardToNextYear > mMaxLeaves)
+    if(carryForwardToNextYearParam > mMaxLeaves)
     {
         std::cout << "Cannot carry forward more than max leaves. Max Leaves: " << mMaxLeaves << std::endl;
         return;
     }
     if(mCurrentLeaves > 0)
     {
-        if(carryForwardToNextYear >= mCurrentLeaves)
+        if(carryForwardToNextYearParam >= mCurrentLeaves)
         {
             mCurrentLeaves += mMaxLeaves;
         }
         else
         {
-            mCurrentLeaves = carryForwardToNextYear + mMaxLeaves;
+            mCurrentLeaves = carryForwardToNextYearParam + mMaxLeaves;
         }
     }
     mLeaveApplied = 0;
@@ -118,7 +118,7 @@ void convertIntern2FullTime(FullEmp* fullEmpParam, const Employee* empParam)
     std::string_view sDOJ = sEmpcastFull->mDOJ = empParam->mDOJ;
 
     std::string sTodaysDate;
-    fullEmpParam->getTodayDate(sTodaysDate);
+    fullEmpParam->pGetTodayDate(sTodaysDate);
     int8_t sLeftMonth;
     if(sDOJ != "NA" && sDOJ.length() == 10)
     {
