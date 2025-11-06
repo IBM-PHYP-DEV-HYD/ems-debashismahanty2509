@@ -193,9 +193,11 @@ void Employee::setEmployeeStatus(EmpStatus empStatusParam)
     mEmployeeStatus = empStatusParam;
 }
 
-void Employee::setDOL(const std::string &dolParam)
+void Employee::setDOL()
 {
-    mDOL = dolParam;
+    std::string sDate;
+    pGetTodayDate(sDate);
+    mDOL = sDate;
 }
 void Employee::setDOJ(void)
 {

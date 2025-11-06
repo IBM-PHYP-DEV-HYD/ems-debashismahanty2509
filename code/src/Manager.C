@@ -118,15 +118,18 @@ void Manager::removeEmployee(const std::string& empIDParam)
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
         if(sEmp->getID() == empIDParam)
         {
+            sEmp->setEmployeeStatus(EmployeeIF::RESIGNED);
+            sEmp->setDOL();
             if(nullptr==mResignedEmployeeList)
             {
                 mResignedEmployeeList = new EDLL<EmployeeIF*>(1, sEmp);
+
             }
             else
             {
                 mResignedEmployeeList->pushBack(sEmp);
             }
-            mEmployeeList->remElementMiddle(sItr);
+            // mEmployeeList->remElementMiddle(sItr);
             isSuccess = true;
             std::cout<<"Removed Emp Successfully \n";
             break;

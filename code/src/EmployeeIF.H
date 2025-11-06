@@ -84,7 +84,7 @@ class EmployeeIF
 
     virtual void setEmployeeType(EmpType empTypeParam) = 0;
     virtual void setEmployeeStatus(EmpStatus empStatusParam) = 0;
-    virtual void setDOL(const std::string& dolParam) = 0;
+    virtual void setDOL() = 0;
 
     virtual void setLeavesApplied(const uint8_t& leavesParam) = 0;
     virtual void renewLeaveBalance(const uint8_t& carryForwardToNextYearParam) = 0;

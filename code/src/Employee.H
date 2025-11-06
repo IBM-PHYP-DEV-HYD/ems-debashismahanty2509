@@ -64,7 +64,7 @@ class Employee : public EmployeeIF
     //Setter functions
     void setEmployeeType(EmpType empTypeParam);
     void setEmployeeStatus(EmpStatus empStatusParam);
-    void setDOL(const std::string& dolParam);
+    void setDOL();
     virtual void setLeavesApplied(const uint8_t& leavesParam);
     virtual void renewLeaveBalance(const uint8_t& carryForwardToNextYearParam);
     virtual void addLeavesToAll(const uint8_t& leavesParam);
