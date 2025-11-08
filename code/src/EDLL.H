@@ -79,6 +79,14 @@ template<class T> void EDLL<T>::remElementMiddle(size_t posParam)
         this->mSize--;
         delete sItr;
     }
+    else if(posParam == this->mSize)
+    {
+        Node<T>* sItr = this->mTail;
+        this->mTail = this->mTail->mPrevNode;
+        this->mTail->mNextNode = nullptr;
+        this->mSize--;
+        delete sItr;
+    }
     else
     {
         size_t tempCount=0;

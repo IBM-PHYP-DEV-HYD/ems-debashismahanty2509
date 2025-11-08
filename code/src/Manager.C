@@ -120,16 +120,16 @@ void Manager::removeEmployee(const std::string& empIDParam)
         {
             sEmp->setEmployeeStatus(EmployeeIF::RESIGNED);
             sEmp->setDOL();
+            EmployeeIF* newREmp = new Employee(*static_cast<Employee*>(sEmp));
             if(nullptr==mResignedEmployeeList)
             {
-                mResignedEmployeeList = new EDLL<EmployeeIF*>(1, sEmp);
-
+                mResignedEmployeeList = new EDLL<EmployeeIF*>(1, newREmp);
             }
             else
             {
-                mResignedEmployeeList->pushBack(sEmp);
+                mResignedEmployeeList->pushBack(newREmp);
             }
-            // mEmployeeList->remElementMiddle(sItr);
+            mEmployeeList->remElementMiddle(sItr);
             isSuccess = true;
             std::cout<<"Removed Emp Successfully \n";
             break;
@@ -144,31 +144,70 @@ void Manager::removeEmployee(const std::string& empIDParam)
 void Manager::displayEmployeeType(Employee::EmpType empTypeParam)
 {
     // Implementation to display employees based on empTypeParam
-    if(nullptr==mEmployeeList || mEmployeeList->empty())
+    bool isTableCalled = false;
+    if(NULL != mEmployeeList && !mEmployeeList->empty())
     {
-        std::cout << "No employees to display!" << std::endl;
-        return;
-    }
-    designForAll();
-    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
-    {
-        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        Employee::EmpType sEmpType = sEmp->getEmployeeType();
-        if(sEmpType == empTypeParam)
+        for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
         {
-            if(sEmpType == Employee::EmpType::FULLTIME)
+            EmployeeIF* sEmp = (*mEmployeeList)[sItr];
+            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmpType == empTypeParam)
             {
-                std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
-            }
-            else if(sEmpType == Employee::EmpType::INTERN)
-            {
-                std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
-            }
-            else if(sEmpType == Employee::EmpType::CONTRACTUAL)
-            {
-                std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+                if(!isTableCalled)
+                {
+                    isTableCalled = true;
+                    designForAll();
+                }
+                if(sEmpType == Employee::EmpType::FULLTIME)
+                {
+                    std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::INTERN)
+                {
+                    std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                {
+                    std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+                }
             }
         }
+    }
+    if(NULL != mResignedEmployeeList && !mResignedEmployeeList->empty())
+    {
+        for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
+        {
+            EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
+            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmpType == empTypeParam)
+            {
+                if(!isTableCalled)
+                {
+                    isTableCalled = true;
+                    designForAll();
+                }
+                if(sEmpType == Employee::EmpType::FULLTIME)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::INTERN)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+            }
+        }
+    }
+    if(isTableCalled)
+    {
+        displayEndLine();
+    }
+    else
+    {
+        std::cout << "No employees found" << std::endl;
     }
 }
 
@@ -190,6 +229,7 @@ void Manager::designForAll(void)
         << "| " << setw(EmployeeIF::CLeaves) << "Current Leaves"
         << "| " << setw(EmployeeIF::LevApp) << "Leaves Applied"
         << "| " << setw(EmployeeIF::Agncy) << "Agency"
+        << setw(EmployeeIF::LeftMar) << " " << "|"
         << endl;
     cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     cout.unsetf(std::ios::adjustfield);
@@ -226,53 +266,16 @@ void Manager::displayResignedEmployeeList(void)
 void Manager::displayAllEmployee(void)
 {
     // Implementation to display all employees
-    if(nullptr==mEmployeeList || mEmployeeList->empty())
-    {
-        std::cout << "No employees to display!" << std::endl;
-        return;
-    }
-    designForAll();
-    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
-    {
-        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        const Employee::EmpType sEmpType = sEmp->getEmployeeType();
-        if(sEmpType == Employee::EmpType::FULLTIME)
-        {
-            std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
-        }
-        else if(sEmpType == Employee::EmpType::INTERN)
-        {
-            std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
-        }
-        else if(sEmpType == Employee::EmpType::CONTRACTUAL)
-        {
-            std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
-        }
-    }
-    std::cout << "\n";
+    bool isTableCalled = false;
 
-}
-
-bool Manager::isEmpEmpty(void)
-{
-    return ((nullptr == mEmployeeList) || mEmployeeList->empty());
-}
-
-void Manager::searchWithID(const std::string& empIDParam)
-{
-    // Implementation to search employee based on empIDParam
-    if(nullptr==mEmployeeList || mEmployeeList->empty())
+    if(NULL != mEmployeeList && !mEmployeeList->empty())
     {
-        std::cout << "No employees to search!" << std::endl;
-        return;
-    }
-    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
-    {
-        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        Employee::EmpType sEmpType = sEmp->getEmployeeType();
-        if(sEmp->getID() == empIDParam)
+        isTableCalled = true;
+        designForAll();
+        for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
         {
-            designForAll();
+            EmployeeIF* sEmp = (*mEmployeeList)[sItr];
+            const Employee::EmpType sEmpType = sEmp->getEmployeeType();
             if(sEmpType == Employee::EmpType::FULLTIME)
             {
                 std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
@@ -285,10 +288,118 @@ void Manager::searchWithID(const std::string& empIDParam)
             {
                 std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
             }
-            return;
         }
     }
-    std::cout << "Employee with ID " << empIDParam << " not found!" << std::endl;
+    if(NULL != mResignedEmployeeList && !mResignedEmployeeList->empty())
+    {
+        if(!isTableCalled)
+        {
+            designForAll();
+            isTableCalled = true;
+        }
+        for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
+        {
+            EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
+            const Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmpType == Employee::EmpType::FULLTIME)
+            {
+                std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+            }
+            else if(sEmpType == Employee::EmpType::INTERN)
+            {
+                std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+            }
+            else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+            {
+                std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+            }
+        }
+    }
+    if(isTableCalled)
+    {
+        displayEndLine();
+    }
+    else
+    {
+        std::cout << "No employees found" << std::endl;
+    }
+}
+
+bool Manager::isEmpEmpty(void)
+{
+    return ((nullptr == mEmployeeList) || mEmployeeList->empty());
+}
+
+void Manager::searchWithID(const std::string& empIDParam)
+{
+    // Implementation to search employee based on empIDParam
+    bool isTableCalled = false;
+    bool isFound = false;
+    if(NULL != mEmployeeList && !mEmployeeList->empty())
+    {
+        for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
+        {
+            EmployeeIF* sEmp = (*mEmployeeList)[sItr];
+            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmp->getID() == empIDParam)
+            {
+                isTableCalled = true;
+                isFound = true;
+                designForAll();
+                if(sEmpType == Employee::EmpType::FULLTIME)
+                {
+                    std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::INTERN)
+                {
+                    std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                {
+                    std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+                }
+                break;
+            }
+        }
+    }
+    if( !isFound && NULL != mResignedEmployeeList && !mResignedEmployeeList->empty())
+    {
+        for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
+        {
+            EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
+            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmp->getID() == empIDParam)
+            {
+                if(!isTableCalled)
+                {
+                    isTableCalled = true;
+                    designForAll();
+                }
+                isFound = true;
+                if(sEmpType == Employee::EmpType::FULLTIME)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::INTERN)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+                break;
+            }
+        }
+    }
+    if(isTableCalled)
+    {
+        displayEndLine();
+    }
+    if(!isFound)
+    {
+        std::cout << "Employee with ID " << empIDParam << " not found!" << std::endl;
+    }
 }
 
 EmployeeIF* Manager::searchIDIntern(const std::string& empIdParam)
@@ -314,93 +425,237 @@ EmployeeIF* Manager::searchIDIntern(const std::string& empIdParam)
 void Manager::searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam)
 {
     // Implementation to search employee based on sEmpGenderParam
-    if(nullptr==mEmployeeList || mEmployeeList->empty())
+    bool isTableCalled = false;
+    if(NULL != mEmployeeList && !mEmployeeList->empty())
     {
-        std::cout << "No employees to search!" << std::endl;
-        return;
-    }
-    designForAll();
-    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
-    {
-        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        Employee::EmpType sEmpType = sEmp->getEmployeeType();
-        if(sEmp->getGenderType() == sEmpGenderParam)
+        for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
         {
-            if(sEmpType == Employee::EmpType::FULLTIME)
+            EmployeeIF* sEmp = (*mEmployeeList)[sItr];
+            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmp->getGenderType() == sEmpGenderParam)
             {
-                std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
-            }
-            else if(sEmpType == Employee::EmpType::INTERN)
-            {
-                std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
-            }
-            else if(sEmpType == Employee::EmpType::CONTRACTUAL)
-            {
-                std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+                if(!isTableCalled)
+                {
+                    isTableCalled = true;
+                    designForAll();
+                }
+                if(sEmpType == Employee::EmpType::FULLTIME)
+                {
+                    std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::INTERN)
+                {
+                    std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                {
+                    std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+                }
             }
         }
+    }
+    if(NULL != mResignedEmployeeList && !mResignedEmployeeList->empty())
+    {
+        for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
+        {
+            EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
+            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmp->getGenderType() == sEmpGenderParam)
+            {
+                if(!isTableCalled)
+                {
+                    isTableCalled = true;
+                    designForAll();
+                }
+                if(sEmpType == Employee::EmpType::FULLTIME)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::INTERN)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+            }
+        }
+    }
+    if(isTableCalled)
+    {
+        displayEndLine();
+    }
+    else
+    {
+        std::cout << "No employees found with this gender" << std::endl;
     }
 }
 
 void Manager::searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam)
 {
     // Implementation to search employee based on sEmpStatusParam
-    if(nullptr==mEmployeeList || mEmployeeList->empty())
+    if(nullptr==mEmployeeList && nullptr == mResignedEmployeeList)
     {
         std::cout << "No employees to search!" << std::endl;
         return;
     }
-    designForAll();
-    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
+    size_t max_size = 0;
+    bool isTableCalled = false;
+    //find gretter size between mEmployeeList and mResignedEmployeeList
+    findSizeInEmp(max_size);
+    for(size_t sItr=1;sItr<=max_size;sItr++)
     {
-        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        Employee::EmpType sEmpType = sEmp->getEmployeeType();
-        if(sEmp->getEmployeeStatus() == sEmpStatusParam)
+        EmployeeIF* sEmp = nullptr;
+        if(sEmpStatusParam == EmployeeIF::RESIGNED)
         {
-            if(sEmpType == Employee::EmpType::FULLTIME)
+            sEmp = (*mResignedEmployeeList)[sItr];
+        }
+        else
+        {
+            sEmp = (*mEmployeeList)[sItr];
+        }
+
+        if(nullptr != sEmp)
+        {
+            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmp->getEmployeeStatus() == sEmpStatusParam)
             {
-                std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
-            }
-            else if(sEmpType == Employee::EmpType::INTERN)
-            {
-                std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
-            }
-            else if(sEmpType == Employee::EmpType::CONTRACTUAL)
-            {
-                std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+                if(!isTableCalled)
+                {
+                    isTableCalled = true;
+                    designForAll();
+                }
+                displayEmpBasedOnType(sEmp,sEmpType,sEmpStatusParam);
             }
         }
+        else
+        {
+            break;
+        }
+    }
+    if(isTableCalled)
+    {
+        displayEndLine();
+    }
+    else
+    {
+        std::cout << "No employees found" << std::endl;
     }
 }
 
+void Manager::findSizeInEmp(size_t& sEmpSizeParam)
+{
+    if(NULL != mResignedEmployeeList && NULL != mEmployeeList)
+    {
+        sEmpSizeParam = std::max(mEmployeeList->size(), mResignedEmployeeList->size());
+    }
+    else if(NULL != mEmployeeList)
+    {
+        sEmpSizeParam = mEmployeeList->size();
+    }
+    else
+    {
+        sEmpSizeParam = 0;
+    }
+}
+
+void Manager::displayEndLine(void)
+{
+    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+}
+
+void Manager::displayEmpBasedOnType(const EmployeeIF* const sEmpParam,const Employee::EmpType& sEmpTypeParam, const EmployeeIF::EmpStatus& sEmpStatusParam)
+{
+    if(sEmpTypeParam == Employee::EmpType::FULLTIME)
+    {
+        (sEmpStatusParam == EmployeeIF::RESIGNED) ?
+        std::cout << static_cast<const Employee*>(sEmpParam) << std::endl
+        :
+        std::cout << static_cast<const FullEmp*>(sEmpParam) << std::endl;
+    }
+    else if(sEmpTypeParam == Employee::EmpType::INTERN)
+    {
+        (sEmpStatusParam == EmployeeIF::RESIGNED) ?
+        std::cout << static_cast<const Employee*>(sEmpParam) << std::endl
+        :
+        std::cout << static_cast<const InternEmp*>(sEmpParam) << std::endl;
+    }
+    else if(sEmpTypeParam == Employee::EmpType::CONTRACTUAL)
+    {
+        (sEmpStatusParam == EmployeeIF::RESIGNED) ?
+        std::cout << static_cast<const Employee*>(sEmpParam) << std::endl
+        :
+        std::cout << static_cast<const ContEmp*>(sEmpParam) << std::endl;
+    }
+}
 void Manager::searchWithName(const std::string& sEmpNameParam)
 {
     // Implementation to search employee based on sEmpStatusParam
-    if(nullptr==mEmployeeList || mEmployeeList->empty())
+    bool isTableCalled = false;
+    if(NULL != mEmployeeList && !mEmployeeList->empty())
     {
-        std::cout << "No employees to search!" << std::endl;
-        return;
-    }
-    designForAll();
-    for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
-    {
-        EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        Employee::EmpType sEmpType = sEmp->getEmployeeType();
-        if(sEmp->getName().find(sEmpNameParam) != std::string::npos)
+        for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
         {
-            if(sEmpType == Employee::EmpType::FULLTIME)
+            EmployeeIF* sEmp = (*mEmployeeList)[sItr];
+            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmp->getName().find(sEmpNameParam) != std::string::npos)
             {
-                std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
-            }
-            else if(sEmpType == Employee::EmpType::INTERN)
-            {
-                std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
-            }
-            else if(sEmpType == Employee::EmpType::CONTRACTUAL)
-            {
-                std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+                if(!isTableCalled)
+                {
+                    isTableCalled = true;
+                    designForAll();
+                }
+                if(sEmpType == Employee::EmpType::FULLTIME)
+                {
+                    std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::INTERN)
+                {
+                    std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                {
+                    std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
+                }
             }
         }
+    }
+    if(NULL != mResignedEmployeeList && !mResignedEmployeeList->empty())
+    {
+        for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
+        {
+            EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
+            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmp->getName().find(sEmpNameParam) != std::string::npos)
+            {
+                if(!isTableCalled)
+                {
+                    isTableCalled = true;
+                    designForAll();
+                }
+                if(sEmpType == Employee::EmpType::FULLTIME)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::INTERN)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                {
+                    std::cout << static_cast<const Employee*>(sEmp) << std::endl;
+                }
+            }
+        }
+    }
+    if(isTableCalled)
+    {
+        displayEndLine();
+    }
+    else
+    {
+        std::cout << "No employees found with name containing: " << sEmpNameParam << std::endl;
     }
 }
 

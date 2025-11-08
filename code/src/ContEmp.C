@@ -47,11 +47,12 @@ std::ostream& operator<<(std::ostream& osParam , const ContEmp* emp)
 {
     osParam << static_cast<const Employee*>(emp);
     osParam << std::left;
-    osParam << "| " << std::setw(EmployeeIF::Clg) << "--"; 
+    osParam << "| " << std::setw(EmployeeIF::Clg) << "--";
     osParam << "| " << std::setw(EmployeeIF::Bnh) << "--";
     osParam << "| " << std::setw(EmployeeIF::CLeaves) << "--";
     osParam << "| " << std::setw(EmployeeIF::LevApp) << "--";
     osParam << "| " << std::setw(EmployeeIF::Agncy) << emp->getAgency();
+    osParam << std::setw(EmployeeIF::LeftMar) << " " << "|";
     osParam.unsetf(std::ios::adjustfield);
     return osParam;
 }

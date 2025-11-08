@@ -27,8 +27,6 @@ class Manager
         size_t mSizeOfInternEmployee=0;
         size_t mSizeOfContractualEmployee=0;
 
-
-
         static Manager* getInstance(const std::string& companyNameParam, std::string_view userNameParam = "admin", std::string_view PassParam = "admin");
         void addCredentials(std::string_view userNameParam, std::string_view PassParam);
         void addEmployee(Employee::EmpType empTypeParam);
@@ -50,6 +48,9 @@ class Manager
         static Manager* mOwnPtr;
         EmployeeIF* searchIDIntern(const std::string& empIdParam);
         void designForAll(void);
+        void displayEndLine(void);
+        void displayEmpBasedOnType(const EmployeeIF* const sEmp, const Employee::EmpType& sEmpType, const EmployeeIF::EmpStatus& sEmpStatusParam);
+        void findSizeInEmp(size_t& sEmpSizeParam);
 
 };
 #endif

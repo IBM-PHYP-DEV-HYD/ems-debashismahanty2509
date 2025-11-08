@@ -105,6 +105,7 @@ std::ostream& operator<<(std::ostream& osParam , const FullEmp* empParam)
     osParam << "| " << std::setw(EmployeeIF::CLeaves) << (int)empParam->mCurrentLeaves;
     osParam << "| " << std::setw(EmployeeIF::LevApp) << (int)empParam->mLeaveApplied;
     osParam << "| " << std::setw(EmployeeIF::Agncy) << "--";
+    osParam << std::setw(EmployeeIF::LeftMar) << " " << "|";
     osParam.unsetf(std::ios::adjustfield);
     return osParam;
 }

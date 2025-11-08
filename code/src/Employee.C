@@ -52,8 +52,7 @@ void Employee::setDOLBasedOnDOJ(bool isDOJSetParam, std::string basedOnTodayDate
             mDOL = "NA";
             mDOJ.length() != 10 ? std::cout << "DOJ is not set properly\n"
                                             << std::endl
-                                : std::cout << "DOL is set to NA\n"
-                                            << std::endl;
+                                : std::cout << "";
             return;
         }
         else if (mEmployeeType == EmpType::CONTRACTUAL)
@@ -83,8 +82,7 @@ void Employee::setDOLBasedOnDOJ(bool isDOJSetParam, std::string basedOnTodayDate
             mDOL = "NA";
             basedOnTodayDateParam.length() != 10 ? std::cout << "DOJ is not set properly\n"
                                                              << std::endl
-                                                 : std::cout << "DOL is set to NA\n"
-                                                             << std::endl;
+                                                 : std::cout << "";
             return;
         }
         else if (mEmployeeType == EmpType::CONTRACTUAL)
@@ -241,6 +239,11 @@ const std::string_view Employee::getDOJ(void) const
     return mDOJ;
 }
 
+const std::string_view Employee::getDOL(void) const
+{
+    return mDOL;
+}
+
 size_t Employee::getEmployeeCount()
 {
     return mMemberNumbers;
@@ -379,6 +382,16 @@ std::ostream &operator<<(std::ostream &osParam, const Employee *empParam)
     default:
         osParam << "None";
         break;
+    }
+
+    if(empParam->getEmployeeStatus() == EmployeeIF::RESIGNED)
+    {
+        osParam << "| " << std::setw(EmployeeIF::Clg) << "--";
+        osParam << "| " << std::setw(EmployeeIF::Bnh) << "--";
+        osParam << "| " << std::setw(EmployeeIF::CLeaves) << "--";
+        osParam << "| " << std::setw(EmployeeIF::LevApp) << "--";
+        osParam << "| " << std::setw(EmployeeIF::Agncy) << "--";
+        osParam << std::setw(EmployeeIF::LeftMar) << " " << "|";
     }
     osParam.unsetf(std::ios::adjustfield);
     return osParam;
