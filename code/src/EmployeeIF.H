@@ -53,7 +53,7 @@ class EmployeeIF
     };
     enum WidthPrint
     {
-        Name    = 15,
+        Name    = 17,
         Id      = 12,
         Gender  = 10,
         Dob     = 12,
@@ -66,7 +66,7 @@ class EmployeeIF
         CLeaves = 18,
         LevApp  = 18,
         Agncy   = 15,
-        LeftMar = 15,
+        LeftMar = 13,
     };
 
 
