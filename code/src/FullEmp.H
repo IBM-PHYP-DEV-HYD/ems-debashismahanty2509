@@ -12,7 +12,7 @@ class FullEmp : public Employee
 {
     public:
     FullEmp();
-    FullEmp(EmpStatus empStatusParam);
+    FullEmp(Utils::EmpStatus empStatusParam);
     FullEmp(const InternEmp& objParam);
     virtual ~FullEmp();
     size_t getEmployeeCount() override;

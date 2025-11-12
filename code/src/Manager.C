@@ -65,21 +65,21 @@ void Manager::addCredentials(std::string_view userNameParam, std::string_view pa
     }
 }
 
-void Manager::addEmployee(Employee::EmpType empTypeParam)
+void Manager::addEmployee(Utils::EmpType empTypeParam)
 {
     EmployeeIF* sNewEmp = nullptr;
     // Implementation to add employee based on empTypeParam
     switch (empTypeParam)
     {
-        case Employee::EmpType::FULLTIME:
+        case Utils::EmpType::FULLTIME:
             mSizeOfFullTimeEmployee++;
             sNewEmp = new FullEmp();
             break;
-        case Employee::EmpType::INTERN:
+        case Utils::EmpType::INTERN:
             mSizeOfInternEmployee++;
             sNewEmp = new InternEmp();
             break;
-        case Employee::EmpType::CONTRACTUAL:
+        case Utils::EmpType::CONTRACTUAL:
             mSizeOfContractualEmployee++;
             sNewEmp = new ContEmp();
             break;
@@ -100,11 +100,11 @@ void Manager::addRandomEmp(uint16_t numOfEmpParam)
 {
     for(uint8_t i=0; i<numOfEmpParam; i++)
     {
-        addEmployee(static_cast<Employee::EmpType>(rand() % 3));
+        addEmployee(static_cast<Utils::EmpType>(rand() % 3));
     }
 }
 
-void Manager::removeEmployee(const std::string& empIDParam)
+void Manager::removeEmployee(const std::string& empIDParam,bool isResignedReqParam)
 {
     // Implementation to remove employee based on empIDParam
     bool isSuccess = false;
@@ -118,14 +118,14 @@ void Manager::removeEmployee(const std::string& empIDParam)
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
         if(sEmp->getID() == empIDParam)
         {
-            sEmp->setEmployeeStatus(EmployeeIF::RESIGNED);
+            sEmp->setEmployeeStatus(Utils::RESIGNED);
             sEmp->setDOL();
             EmployeeIF* newREmp = new Employee(*static_cast<Employee*>(sEmp));
-            if(nullptr==mResignedEmployeeList)
+            if(nullptr==mResignedEmployeeList && isResignedReqParam)
             {
                 mResignedEmployeeList = new EDLL<EmployeeIF*>(1, newREmp);
             }
-            else
+            else if(isResignedReqParam)
             {
                 mResignedEmployeeList->pushBack(newREmp);
             }
@@ -141,7 +141,7 @@ void Manager::removeEmployee(const std::string& empIDParam)
     }
 }
 
-void Manager::displayEmployeeType(Employee::EmpType empTypeParam)
+void Manager::displayEmployeeType(Utils::EmpType empTypeParam)
 {
     // Implementation to display employees based on empTypeParam
     bool isTableCalled = false;
@@ -150,7 +150,7 @@ void Manager::displayEmployeeType(Employee::EmpType empTypeParam)
         for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
         {
             EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            Utils::EmpType sEmpType = sEmp->getEmployeeType();
             if(sEmpType == empTypeParam)
             {
                 if(!isTableCalled)
@@ -158,15 +158,15 @@ void Manager::displayEmployeeType(Employee::EmpType empTypeParam)
                     isTableCalled = true;
                     designForAll();
                 }
-                if(sEmpType == Employee::EmpType::FULLTIME)
+                if(sEmpType == Utils::EmpType::FULLTIME)
                 {
                     std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::INTERN)
+                else if(sEmpType == Utils::EmpType::INTERN)
                 {
                     std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                else if(sEmpType == Utils::EmpType::CONTRACTUAL)
                 {
                     std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
                 }
@@ -178,7 +178,7 @@ void Manager::displayEmployeeType(Employee::EmpType empTypeParam)
         for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
         {
             EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
-            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            Utils::EmpType sEmpType = sEmp->getEmployeeType();
             if(sEmpType == empTypeParam)
             {
                 if(!isTableCalled)
@@ -186,15 +186,15 @@ void Manager::displayEmployeeType(Employee::EmpType empTypeParam)
                     isTableCalled = true;
                     designForAll();
                 }
-                if(sEmpType == Employee::EmpType::FULLTIME)
+                if(sEmpType == Utils::EmpType::FULLTIME)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::INTERN)
+                else if(sEmpType == Utils::EmpType::INTERN)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                else if(sEmpType == Utils::EmpType::CONTRACTUAL)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
@@ -216,20 +216,20 @@ void Manager::designForAll(void)
     using namespace std;  // only applies inside this fuction()
     cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     cout << left
-        << "| " << setw(EmployeeIF::Name) << "Name"
-        << "| " << setw(EmployeeIF::Id) << "ID"
-        << "| " << setw(EmployeeIF::Gender) << "Gender"
-        << "| " << setw(EmployeeIF::Dob) << "DOB"
-        << "| " << setw(EmployeeIF::Doj) << "DOJ"
-        << "| " << setw(EmployeeIF::Dol) << "DOL"
-        << "| " << setw(EmployeeIF::Type) << "Type"
-        << "| " << setw(EmployeeIF::Status) << "Status"
-        << "| " << setw(EmployeeIF::Clg) << "College"
-        << "| " << setw(EmployeeIF::Bnh) << "Branch"
-        << "| " << setw(EmployeeIF::CLeaves) << "Current Leaves"
-        << "| " << setw(EmployeeIF::LevApp) << "Leaves Applied"
-        << "| " << setw(EmployeeIF::Agncy) << "Agency"
-        << setw(EmployeeIF::LeftMar) << " " << "|"
+        << "| " << setw(Utils::Name) << "Name"
+        << "| " << setw(Utils::Id) << "ID"
+        << "| " << setw(Utils::Gender) << "Gender"
+        << "| " << setw(Utils::Dob) << "DOB"
+        << "| " << setw(Utils::Doj) << "DOJ"
+        << "| " << setw(Utils::Dol) << "DOL"
+        << "| " << setw(Utils::Type) << "Type"
+        << "| " << setw(Utils::Status) << "Status"
+        << "| " << setw(Utils::Clg) << "College"
+        << "| " << setw(Utils::Bnh) << "Branch"
+        << "| " << setw(Utils::CLeaves) << "Current Leaves"
+        << "| " << setw(Utils::LevApp) << "Leaves Applied"
+        << "| " << setw(Utils::Agncy) << "Agency"
+        << setw(Utils::LeftMar) << " " << "|"
         << endl;
     cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
     cout.unsetf(std::ios::adjustfield);
@@ -246,16 +246,16 @@ void Manager::displayResignedEmployeeList(void)
     for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
-        Employee::EmpType sEmpType = sEmp->getEmployeeType();
-        if(sEmpType == Employee::EmpType::FULLTIME)
+        Utils::EmpType sEmpType = sEmp->getEmployeeType();
+        if(sEmpType == Utils::EmpType::FULLTIME)
         {
             std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
         }
-        else if(sEmpType == Employee::EmpType::INTERN)
+        else if(sEmpType == Utils::EmpType::INTERN)
         {
             std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
         }
-        else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+        else if(sEmpType == Utils::EmpType::CONTRACTUAL)
         {
             std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
         }
@@ -275,16 +275,16 @@ void Manager::displayAllEmployee(void)
         for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
         {
             EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-            const Employee::EmpType sEmpType = sEmp->getEmployeeType();
-            if(sEmpType == Employee::EmpType::FULLTIME)
+            const Utils::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmpType == Utils::EmpType::FULLTIME)
             {
                 std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
             }
-            else if(sEmpType == Employee::EmpType::INTERN)
+            else if(sEmpType == Utils::EmpType::INTERN)
             {
                 std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
             }
-            else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+            else if(sEmpType == Utils::EmpType::CONTRACTUAL)
             {
                 std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
             }
@@ -300,16 +300,16 @@ void Manager::displayAllEmployee(void)
         for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
         {
             EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
-            const Employee::EmpType sEmpType = sEmp->getEmployeeType();
-            if(sEmpType == Employee::EmpType::FULLTIME)
+            const Utils::EmpType sEmpType = sEmp->getEmployeeType();
+            if(sEmpType == Utils::EmpType::FULLTIME)
             {
                 std::cout << static_cast<const Employee*>(sEmp) << std::endl;
             }
-            else if(sEmpType == Employee::EmpType::INTERN)
+            else if(sEmpType == Utils::EmpType::INTERN)
             {
                 std::cout << static_cast<const Employee*>(sEmp) << std::endl;
             }
-            else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+            else if(sEmpType == Utils::EmpType::CONTRACTUAL)
             {
                 std::cout << static_cast<const Employee*>(sEmp) << std::endl;
             }
@@ -340,21 +340,21 @@ void Manager::searchWithID(const std::string& empIDParam)
         for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
         {
             EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            Utils::EmpType sEmpType = sEmp->getEmployeeType();
             if(sEmp->getID() == empIDParam)
             {
                 isTableCalled = true;
                 isFound = true;
                 designForAll();
-                if(sEmpType == Employee::EmpType::FULLTIME)
+                if(sEmpType == Utils::EmpType::FULLTIME)
                 {
                     std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::INTERN)
+                else if(sEmpType == Utils::EmpType::INTERN)
                 {
                     std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                else if(sEmpType == Utils::EmpType::CONTRACTUAL)
                 {
                     std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
                 }
@@ -367,7 +367,7 @@ void Manager::searchWithID(const std::string& empIDParam)
         for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
         {
             EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
-            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            Utils::EmpType sEmpType = sEmp->getEmployeeType();
             if(sEmp->getID() == empIDParam)
             {
                 if(!isTableCalled)
@@ -376,15 +376,15 @@ void Manager::searchWithID(const std::string& empIDParam)
                     designForAll();
                 }
                 isFound = true;
-                if(sEmpType == Employee::EmpType::FULLTIME)
+                if(sEmpType == Utils::EmpType::FULLTIME)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::INTERN)
+                else if(sEmpType == Utils::EmpType::INTERN)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                else if(sEmpType == Utils::EmpType::CONTRACTUAL)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
@@ -413,8 +413,8 @@ EmployeeIF* Manager::searchIDIntern(const std::string& empIdParam)
     for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        Employee::EmpType sEmpType = sEmp->getEmployeeType();
-        if(sEmp->getID() == empIdParam && sEmpType == Employee::EmpType::INTERN)
+        Utils::EmpType sEmpType = sEmp->getEmployeeType();
+        if(sEmp->getID() == empIdParam && sEmpType == Utils::EmpType::INTERN)
         {
             return sEmp;
         }
@@ -422,7 +422,7 @@ EmployeeIF* Manager::searchIDIntern(const std::string& empIdParam)
     return NULL;
 }
 
-void Manager::searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam)
+void Manager::searchWithGender(const Utils::EmpGender& sEmpGenderParam)
 {
     // Implementation to search employee based on sEmpGenderParam
     bool isTableCalled = false;
@@ -431,7 +431,7 @@ void Manager::searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam)
         for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
         {
             EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            Utils::EmpType sEmpType = sEmp->getEmployeeType();
             if(sEmp->getGenderType() == sEmpGenderParam)
             {
                 if(!isTableCalled)
@@ -439,15 +439,15 @@ void Manager::searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam)
                     isTableCalled = true;
                     designForAll();
                 }
-                if(sEmpType == Employee::EmpType::FULLTIME)
+                if(sEmpType == Utils::EmpType::FULLTIME)
                 {
                     std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::INTERN)
+                else if(sEmpType == Utils::EmpType::INTERN)
                 {
                     std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                else if(sEmpType == Utils::EmpType::CONTRACTUAL)
                 {
                     std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
                 }
@@ -459,7 +459,7 @@ void Manager::searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam)
         for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
         {
             EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
-            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            Utils::EmpType sEmpType = sEmp->getEmployeeType();
             if(sEmp->getGenderType() == sEmpGenderParam)
             {
                 if(!isTableCalled)
@@ -467,15 +467,15 @@ void Manager::searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam)
                     isTableCalled = true;
                     designForAll();
                 }
-                if(sEmpType == Employee::EmpType::FULLTIME)
+                if(sEmpType == Utils::EmpType::FULLTIME)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::INTERN)
+                else if(sEmpType == Utils::EmpType::INTERN)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                else if(sEmpType == Utils::EmpType::CONTRACTUAL)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
@@ -492,7 +492,7 @@ void Manager::searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam)
     }
 }
 
-void Manager::searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam)
+void Manager::searchWithStatus(const Utils::EmpStatus & sEmpStatusParam)
 {
     // Implementation to search employee based on sEmpStatusParam
     if(nullptr==mEmployeeList && nullptr == mResignedEmployeeList)
@@ -507,7 +507,7 @@ void Manager::searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam)
     for(size_t sItr=1;sItr<=max_size;sItr++)
     {
         EmployeeIF* sEmp = nullptr;
-        if(sEmpStatusParam == EmployeeIF::RESIGNED)
+        if(sEmpStatusParam == Utils::RESIGNED)
         {
             sEmp = (*mResignedEmployeeList)[sItr];
         }
@@ -518,7 +518,7 @@ void Manager::searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam)
 
         if(nullptr != sEmp)
         {
-            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            Utils::EmpType sEmpType = sEmp->getEmployeeType();
             if(sEmp->getEmployeeStatus() == sEmpStatusParam)
             {
                 if(!isTableCalled)
@@ -565,25 +565,25 @@ void Manager::displayEndLine(void)
     std::cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
 }
 
-void Manager::displayEmpBasedOnType(const EmployeeIF* const sEmpParam,const Employee::EmpType& sEmpTypeParam, const EmployeeIF::EmpStatus& sEmpStatusParam)
+void Manager::displayEmpBasedOnType(const EmployeeIF* const sEmpParam,const Utils::EmpType& sEmpTypeParam, const Utils::EmpStatus& sEmpStatusParam)
 {
-    if(sEmpTypeParam == Employee::EmpType::FULLTIME)
+    if(sEmpTypeParam == Utils::EmpType::FULLTIME)
     {
-        (sEmpStatusParam == EmployeeIF::RESIGNED) ?
+        (sEmpStatusParam == Utils::RESIGNED) ?
         std::cout << static_cast<const Employee*>(sEmpParam) << std::endl
         :
         std::cout << static_cast<const FullEmp*>(sEmpParam) << std::endl;
     }
-    else if(sEmpTypeParam == Employee::EmpType::INTERN)
+    else if(sEmpTypeParam == Utils::EmpType::INTERN)
     {
-        (sEmpStatusParam == EmployeeIF::RESIGNED) ?
+        (sEmpStatusParam == Utils::RESIGNED) ?
         std::cout << static_cast<const Employee*>(sEmpParam) << std::endl
         :
         std::cout << static_cast<const InternEmp*>(sEmpParam) << std::endl;
     }
-    else if(sEmpTypeParam == Employee::EmpType::CONTRACTUAL)
+    else if(sEmpTypeParam == Utils::EmpType::CONTRACTUAL)
     {
-        (sEmpStatusParam == EmployeeIF::RESIGNED) ?
+        (sEmpStatusParam == Utils::RESIGNED) ?
         std::cout << static_cast<const Employee*>(sEmpParam) << std::endl
         :
         std::cout << static_cast<const ContEmp*>(sEmpParam) << std::endl;
@@ -598,7 +598,7 @@ void Manager::searchWithName(const std::string& sEmpNameParam)
         for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
         {
             EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            Utils::EmpType sEmpType = sEmp->getEmployeeType();
             if(sEmp->getName().find(sEmpNameParam) != std::string::npos)
             {
                 if(!isTableCalled)
@@ -606,15 +606,15 @@ void Manager::searchWithName(const std::string& sEmpNameParam)
                     isTableCalled = true;
                     designForAll();
                 }
-                if(sEmpType == Employee::EmpType::FULLTIME)
+                if(sEmpType == Utils::EmpType::FULLTIME)
                 {
                     std::cout << static_cast<const FullEmp*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::INTERN)
+                else if(sEmpType == Utils::EmpType::INTERN)
                 {
                     std::cout << static_cast<const InternEmp*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                else if(sEmpType == Utils::EmpType::CONTRACTUAL)
                 {
                     std::cout << static_cast<const ContEmp*>(sEmp) << std::endl;
                 }
@@ -626,7 +626,7 @@ void Manager::searchWithName(const std::string& sEmpNameParam)
         for(size_t sItr=1;sItr<=mResignedEmployeeList->size();sItr++)
         {
             EmployeeIF* sEmp = (*mResignedEmployeeList)[sItr];
-            Employee::EmpType sEmpType = sEmp->getEmployeeType();
+            Utils::EmpType sEmpType = sEmp->getEmployeeType();
             if(sEmp->getName().find(sEmpNameParam) != std::string::npos)
             {
                 if(!isTableCalled)
@@ -634,15 +634,15 @@ void Manager::searchWithName(const std::string& sEmpNameParam)
                     isTableCalled = true;
                     designForAll();
                 }
-                if(sEmpType == Employee::EmpType::FULLTIME)
+                if(sEmpType == Utils::EmpType::FULLTIME)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::INTERN)
+                else if(sEmpType == Utils::EmpType::INTERN)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
-                else if(sEmpType == Employee::EmpType::CONTRACTUAL)
+                else if(sEmpType == Utils::EmpType::CONTRACTUAL)
                 {
                     std::cout << static_cast<const Employee*>(sEmp) << std::endl;
                 }
@@ -670,7 +670,7 @@ void Manager::addLeavesToAll(const uint8_t& leavesParam)
     for(size_t sItr=1;sItr<=mEmployeeList->size();sItr++)
     {
         EmployeeIF* sEmp = (*mEmployeeList)[sItr];
-        if(sEmp->getEmployeeType() == Employee::EmpType::FULLTIME)
+        if(sEmp->getEmployeeType() == Utils::EmpType::FULLTIME)
         {
             sEmp->addLeavesToAll(leavesParam);
         }
@@ -690,7 +690,7 @@ void Manager::conv2Full(const std::string& empIDParam)
             return;
         }
         mEmployeeList->pushBack(sNewEmp);
-        removeEmployee(empIDParam);
+        removeEmployee(empIDParam,false);
     }
     else
     {

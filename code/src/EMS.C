@@ -22,7 +22,7 @@ void EMS::handleMenu(void)
         {
             case AddAnEmployee:
                 {
-                    EmployeeIF::EmpType sEmpType;
+                    Utils::EmpType sEmpType;
                     int16_t sNumOfEmp = 0;
                     Opeartion sType = pDisplayAddEmployeeMenu(sChoice,sEmpType,sNumOfEmp);
                     if(sType == AddEmpRandom)
@@ -55,9 +55,9 @@ void EMS::handleMenu(void)
                         printf("There is no Emp found, So please add an employee\n");
                         break;
                     }
-                    EmployeeIF::EmpType sEmpType;
-                    Employee::EmpStatus sEmpStatus;
-                    EmployeeIF::EmpGender sEmpGender;
+                    Utils::EmpType sEmpType;
+                    Utils::EmpStatus sEmpStatus;
+                    Utils::EmpGender sEmpGender;
                     std::string sEmpId;
                     Opeartion sType = pDisplayEmployeeDetailsMenu(sChoice,sEmpType,sEmpStatus,sEmpGender,sEmpId);
                     if(sType == AllEmpSummary)
@@ -115,7 +115,7 @@ void EMS::handleMenu(void)
         }
     }
 }
-void EMS::pInputEmpType(EmployeeIF::EmpType& sEmpTypeParam)
+void EMS::pInputEmpType(Utils::EmpType& sEmpTypeParam)
 {
     bool isValid = true;
     char sInput;
@@ -138,18 +138,18 @@ void EMS::pInputEmpType(EmployeeIF::EmpType& sEmpTypeParam)
     } while (isValid == false);
     if(sInput == 'F' || sInput == 'f')
     {
-        sEmpTypeParam = EmployeeIF::FULLTIME;
+        sEmpTypeParam = Utils::FULLTIME;
     }
     else if(sInput == 'C' || sInput == 'c')
     {
-        sEmpTypeParam = EmployeeIF::CONTRACTUAL;
+        sEmpTypeParam = Utils::CONTRACTUAL;
     }
     else
     {
-        sEmpTypeParam = EmployeeIF::INTERN;
+        sEmpTypeParam = Utils::INTERN;
     }
 }
-void EMS::pInputEmpStatus(EmployeeIF::EmpStatus& sEmpStatusParam)
+void EMS::pInputEmpStatus(Utils::EmpStatus& sEmpStatusParam)
 {
     bool isValid = true;
     char sInput;
@@ -172,18 +172,18 @@ void EMS::pInputEmpStatus(EmployeeIF::EmpStatus& sEmpStatusParam)
     } while (isValid == false);
     if(sInput == 'A' || sInput == 'a')
     {
-        sEmpStatusParam = EmployeeIF::ACTIVE;
+        sEmpStatusParam = Utils::ACTIVE;
     }
     else if(sInput == 'i' || sInput == 'I')
     {
-        sEmpStatusParam = EmployeeIF::INACTIVE;
+        sEmpStatusParam = Utils::INACTIVE;
     }
     else
     {
-        sEmpStatusParam = EmployeeIF::RESIGNED;
+        sEmpStatusParam = Utils::RESIGNED;
     }
 }
-void EMS::pInputEmpGender(EmployeeIF::EmpGender& sEmpGenderParam)
+void EMS::pInputEmpGender(Utils::EmpGender& sEmpGenderParam)
 {
     bool isValid = true;
     char sInput;
@@ -206,11 +206,11 @@ void EMS::pInputEmpGender(EmployeeIF::EmpGender& sEmpGenderParam)
     } while (isValid == false);
     if(sInput == 'M' || sInput == 'm')
     {
-        sEmpGenderParam = EmployeeIF::Male;
+        sEmpGenderParam = Utils::Male;
     }
     else if(sInput == 'F' || sInput == 'f')
     {
-        sEmpGenderParam = EmployeeIF::Female;
+        sEmpGenderParam = Utils::Female;
     }
 }
 bool EMS::pDisplayMainMenu(uint16_t& sChoiceParam)
@@ -261,7 +261,7 @@ bool EMS::pDisplayMainMenu(uint16_t& sChoiceParam)
     }
     return true;
 }
-EMS::Opeartion EMS::pDisplayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, int16_t& numOfEmpParam)
+EMS::Opeartion EMS::pDisplayAddEmployeeMenu(uint16_t& sChoiceParam, Utils::EmpType& sEmpTypeParam, int16_t& numOfEmpParam)
 {
     bool isValid = true;
     do
@@ -317,7 +317,7 @@ EMS::Opeartion EMS::pDisplayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::
     }
     return MainMenu;
 }
-EMS::Opeartion EMS::pDisplayEmployeeDetailsMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, EmployeeIF::EmpStatus& sEmpStatusParam, EmployeeIF::EmpGender& sEmpGenderParam, std::string& sEmpIdParam)
+EMS::Opeartion EMS::pDisplayEmployeeDetailsMenu(uint16_t& sChoiceParam, Utils::EmpType& sEmpTypeParam, Utils::EmpStatus& sEmpStatusParam, Utils::EmpGender& sEmpGenderParam, std::string& sEmpIdParam)
 {
     bool isValid = true;
     do

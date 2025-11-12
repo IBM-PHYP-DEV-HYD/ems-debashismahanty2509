@@ -2,13 +2,13 @@
 #include "iomanip"
 
 size_t ContEmp::mSizeOfContEmployee = 0;
-ContEmp::ContEmp() : Employee(EmployeeIF::EmpType::CONTRACTUAL)
+ContEmp::ContEmp() : Employee(Utils::EmpType::CONTRACTUAL)
 {
     mSizeOfContEmployee++;
-    mAgency = static_cast<EmployeeIF::Agency>(rand() % 3);
+    mAgency = static_cast<Utils::Agency>(rand() % 3);
 }
 
-ContEmp::ContEmp(EmpStatus empStatusParam) : Employee(EmployeeIF::EmpType::CONTRACTUAL, empStatusParam)
+ContEmp::ContEmp(Utils::EmpStatus empStatusParam) : Employee(Utils::EmpType::CONTRACTUAL, empStatusParam)
 {
     mSizeOfContEmployee++;
     std::cin >> this;
@@ -28,13 +28,13 @@ std::string_view ContEmp::getAgency(void) const
 {
     switch(mAgency)
     {
-        case EmployeeIF::Agency::Avengers:
+        case Utils::Agency::Avengers:
             return "Avengers";
             break;
-        case EmployeeIF::Agency::JusticeLeague:
+        case Utils::Agency::JusticeLeague:
             return "JusticeLeague";
             break;
-        case EmployeeIF::Agency::XMen:
+        case Utils::Agency::XMen:
             return "XMen";
             break;
         default:
@@ -47,12 +47,12 @@ std::ostream& operator<<(std::ostream& osParam , const ContEmp* emp)
 {
     osParam << static_cast<const Employee*>(emp);
     osParam << std::left;
-    osParam << "| " << std::setw(EmployeeIF::Clg) << "--";
-    osParam << "| " << std::setw(EmployeeIF::Bnh) << "--";
-    osParam << "| " << std::setw(EmployeeIF::CLeaves) << "--";
-    osParam << "| " << std::setw(EmployeeIF::LevApp) << "--";
-    osParam << "| " << std::setw(EmployeeIF::Agncy) << emp->getAgency();
-    osParam << std::setw(EmployeeIF::LeftMar) << " " << "|";
+    osParam << "| " << std::setw(Utils::Clg) << "--";
+    osParam << "| " << std::setw(Utils::Bnh) << "--";
+    osParam << "| " << std::setw(Utils::CLeaves) << "--";
+    osParam << "| " << std::setw(Utils::LevApp) << "--";
+    osParam << "| " << std::setw(Utils::Agncy) << emp->getAgency();
+    osParam << std::setw(Utils::LeftMar) << " " << "|";
     osParam.unsetf(std::ios::adjustfield);
     return osParam;
 }
@@ -66,11 +66,11 @@ std::istream& operator>>(std::istream& isParam , ContEmp* emp)
     if(emp->validCheck(isParam) == false || sAgencyInput < 1 || sAgencyInput > 3)
     {
         std::cout << "Invalid input. Setting dafult to Avengers" << std::endl;
-        emp->mAgency = static_cast<EmployeeIF::Agency>(0);
+        emp->mAgency = static_cast<Utils::Agency>(0);
     }
     else
     {
-        emp->mAgency = static_cast<EmployeeIF::Agency>(sAgencyInput - 1);
+        emp->mAgency = static_cast<Utils::Agency>(sAgencyInput - 1);
     }
     return isParam;
 }

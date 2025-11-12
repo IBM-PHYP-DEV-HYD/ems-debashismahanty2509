@@ -11,7 +11,7 @@ class ContEmp : public Employee
 {
     public:
     ContEmp();
-    ContEmp(EmpStatus empStatusParam);
+    ContEmp(Utils::EmpStatus empStatusParam);
     virtual ~ContEmp();
     size_t getEmployeeCount() override;
     std::string_view getAgency(void) const override;
@@ -20,6 +20,6 @@ class ContEmp : public Employee
 
     private:
     static size_t mSizeOfContEmployee;
-    EmployeeIF::Agency mAgency;
+    Utils::Agency mAgency;
 };
 #endif

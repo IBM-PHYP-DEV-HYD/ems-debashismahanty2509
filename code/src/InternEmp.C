@@ -4,19 +4,19 @@
 size_t InternEmp::mSizeOfInternEmployee = 0;
 
 
-InternEmp::InternEmp() : Employee(EmployeeIF::EmpType::INTERN)
+InternEmp::InternEmp() : Employee(Utils::EmpType::INTERN)
 {
     mSizeOfInternEmployee++;
-    mCollege = static_cast<EmployeeIF::College>(rand() % 7);
-    switch(static_cast<EmployeeIF::Branch>(rand() % 3))
+    mCollege = static_cast<Utils::College>(rand() % 7);
+    switch(static_cast<Utils::Branch>(rand() % 3))
     {
-        case EmployeeIF::CSE:
+        case Utils::CSE:
             mBranch = "CSE";
             break;
-        case EmployeeIF::ECE:
+        case Utils::ECE:
             mBranch = "ECE";
             break;
-        case EmployeeIF::CSIT:
+        case Utils::CSIT:
             mBranch = "CSIT";
             break;
         default:
@@ -26,7 +26,7 @@ InternEmp::InternEmp() : Employee(EmployeeIF::EmpType::INTERN)
     }
 }
 
-InternEmp::InternEmp(EmpStatus empStatusParam) : Employee(EmployeeIF::EmpType::INTERN, empStatusParam)
+InternEmp::InternEmp(Utils::EmpStatus empStatusParam) : Employee(Utils::EmpType::INTERN, empStatusParam)
 {
     mSizeOfInternEmployee++;
     std::cin >> this;
@@ -46,12 +46,12 @@ std::ostream& operator<<(std::ostream& osParam, const InternEmp* emp)
 {
     osParam << static_cast<const Employee*>(emp);
     osParam << std::left;
-    osParam << "| " << std::setw(EmployeeIF::Clg) << emp->getCollege();
-    osParam << "| " << std::setw(EmployeeIF::Bnh) << emp->getBranch();
-    osParam << "| " << std::setw(EmployeeIF::CLeaves) << "--";
-    osParam << "| " << std::setw(EmployeeIF::LevApp) << "--";
-    osParam << "| " << std::setw(EmployeeIF::Agncy) << "--";
-    osParam << std::setw(EmployeeIF::LeftMar) << " " << "|";
+    osParam << "| " << std::setw(Utils::Clg) << emp->getCollege();
+    osParam << "| " << std::setw(Utils::Bnh) << emp->getBranch();
+    osParam << "| " << std::setw(Utils::CLeaves) << "--";
+    osParam << "| " << std::setw(Utils::LevApp) << "--";
+    osParam << "| " << std::setw(Utils::Agncy) << "--";
+    osParam << std::setw(Utils::LeftMar) << " " << "|";
     osParam.unsetf(std::ios::adjustfield);
     return osParam;
 }
@@ -65,19 +65,19 @@ std::string InternEmp::getCollege(void) const
 {
     switch(mCollege)
     {
-        case EmployeeIF::College::IitDelhi:
+        case Utils::College::IitDelhi:
             return "IitDelhi";
-        case EmployeeIF::College::IitMumbai:
+        case Utils::College::IitMumbai:
             return "IitMumbai";
-        case EmployeeIF::College::IitKanpur:
+        case Utils::College::IitKanpur:
             return "IitKanpur";
-        case EmployeeIF::College::IitHyderabad:
+        case Utils::College::IitHyderabad:
             return "IitHyderabad";
-        case EmployeeIF::College::NitWarangal:
+        case Utils::College::NitWarangal:
             return "NitWarangal";
-        case EmployeeIF::College::NitTiruchi:
+        case Utils::College::NitTiruchi:
             return "NitTiruchi";
-        case EmployeeIF::College::IiitHyderabad:
+        case Utils::College::IiitHyderabad:
             return "IiitHyderabad";
         default:
             return "NA";
@@ -93,11 +93,11 @@ std::istream& operator>>(std::istream& isParam, InternEmp* emp)
     if(emp->validCheck(isParam) == false || (sCollege < 1 || sCollege > 7))
     {
         std::cout<<"Invalid input, setting default college to IitDelhi\n"<<std::endl;
-        emp->mCollege = static_cast<EmployeeIF::College>(0);
+        emp->mCollege = static_cast<Utils::College>(0);
     }
     else
     {
-        emp->mCollege = static_cast<EmployeeIF::College>(sCollege - 1);
+        emp->mCollege = static_cast<Utils::College>(sCollege - 1);
     }
 
     std::cout<< "Enter Branch: \n1. CSE\n2. ECE\n3. CSIT\n";
@@ -106,11 +106,11 @@ std::istream& operator>>(std::istream& isParam, InternEmp* emp)
     if(emp->validCheck(isParam) == false || (emp->mBranch < "1" || emp->mBranch > "3"))
     {
         std::cout<<"Invalid input, setting default branch to CSE\n"<<std::endl;
-        emp->mBranch = static_cast<EmployeeIF::Branch>(0);
+        emp->mBranch = static_cast<Utils::Branch>(0);
     }
     else
     {
-        emp->mBranch = static_cast<EmployeeIF::Branch>(std::stoi(emp->mBranch) - 1);
+        emp->mBranch = static_cast<Utils::Branch>(std::stoi(emp->mBranch) - 1);
     }
 
     return isParam;

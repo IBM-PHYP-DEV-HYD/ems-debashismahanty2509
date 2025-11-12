@@ -11,7 +11,7 @@ class InternEmp : public Employee
 {
     public:
     InternEmp();
-    InternEmp(EmpStatus empStatusParam);
+    InternEmp(Utils::EmpStatus empStatusParam);
     virtual ~InternEmp();
     size_t getEmployeeCount() override;
     const std::string_view& getBranch(void) const override;
@@ -20,10 +20,10 @@ class InternEmp : public Employee
     friend std::istream& operator>>(std::istream& isParam, InternEmp* emp);
 
     private:
-    EmployeeIF::College mCollege;
+    Utils::College mCollege;
     std::string mBranch;
     static size_t mSizeOfInternEmployee;
-    
+
 };
 
 #endif

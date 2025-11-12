@@ -29,15 +29,15 @@ class Manager
 
         static Manager* getInstance(const std::string& companyNameParam, std::string_view userNameParam = "admin", std::string_view PassParam = "admin");
         void addCredentials(std::string_view userNameParam, std::string_view PassParam);
-        void addEmployee(Employee::EmpType empTypeParam);
+        void addEmployee(Utils::EmpType empTypeParam);
         void addRandomEmp(uint16_t numOfEmpParam);
-        void removeEmployee(const std::string& empIDParam);
-        void displayEmployeeType(Employee::EmpType empTypeParam);
+        void removeEmployee(const std::string& empIDParam,bool isResignedReqParam = true);
+        void displayEmployeeType(Utils::EmpType empTypeParam);
         void displayResignedEmployeeList(void);
         void displayAllEmployee(void);
         void searchWithID(const std::string& empIDParam);
-        void searchWithGender(const EmployeeIF::EmpGender& sEmpGenderParam);
-        void searchWithStatus(const EmployeeIF::EmpStatus & sEmpStatusParam);
+        void searchWithGender(const Utils::EmpGender& sEmpGenderParam);
+        void searchWithStatus(const Utils::EmpStatus & sEmpStatusParam);
         void searchWithName(const std::string& sEmpNameParam);
         void addLeavesToAll(const uint8_t& leavesParam);
         void conv2Full(const std::string& empIDParam);
@@ -49,7 +49,7 @@ class Manager
         EmployeeIF* searchIDIntern(const std::string& empIdParam);
         void designForAll(void);
         void displayEndLine(void);
-        void displayEmpBasedOnType(const EmployeeIF* const sEmp, const Employee::EmpType& sEmpType, const EmployeeIF::EmpStatus& sEmpStatusParam);
+        void displayEmpBasedOnType(const EmployeeIF* const sEmp, const Utils::EmpType& sEmpType, const Utils::EmpStatus& sEmpStatusParam);
         void findSizeInEmp(size_t& sEmpSizeParam);
 
 };

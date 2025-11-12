@@ -37,12 +37,12 @@ class EMS
     void handleMenu(void);
 
     protected:
-    void pInputEmpType(EmployeeIF::EmpType& sEmpTypeParam);
-    void pInputEmpStatus(EmployeeIF::EmpStatus& sEmpStatusParam);
-    void pInputEmpGender(EmployeeIF::EmpGender& sEmpGenderParam);
+    void pInputEmpType(Utils::EmpType& sEmpTypeParam);
+    void pInputEmpStatus(Utils::EmpStatus& sEmpStatusParam);
+    void pInputEmpGender(Utils::EmpGender& sEmpGenderParam);
     bool pDisplayMainMenu(uint16_t& sChoiceParam);
-    Opeartion pDisplayAddEmployeeMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, int16_t& numOfEmpParam);
-    Opeartion pDisplayEmployeeDetailsMenu(uint16_t& sChoiceParam, EmployeeIF::EmpType& sEmpTypeParam, EmployeeIF::EmpStatus& sEmpStatusParam, EmployeeIF::EmpGender& sEmpGenderParam, std::string& sEmpIdParam);
+    Opeartion pDisplayAddEmployeeMenu(uint16_t& sChoiceParam, Utils::EmpType& sEmpTypeParam, int16_t& numOfEmpParam);
+    Opeartion pDisplayEmployeeDetailsMenu(uint16_t& sChoiceParam, Utils::EmpType& sEmpTypeParam, Utils::EmpStatus& sEmpStatusParam, Utils::EmpGender& sEmpGenderParam, std::string& sEmpIdParam);
     Opeartion pDisplayOthersMenu(uint16_t& sChoiceParam, std::string& sEmpIdParam, std::string& sEmpName,int16_t& numOfLeavesParam);
 };
 #endif

@@ -4,7 +4,7 @@
 size_t Employee::mMemberNumbers = 0;
 std::string Employee::mFirstNames[10] = {"John", "Jane", "Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Hank"};
 std::string Employee::mLastNames[10] = {"Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"};
-Employee::Employee(EmpType empTypeParam) : mEmployeeType(empTypeParam), mEmployeeStatus(EmpStatus::ACTIVE), mGender(EmployeeIF::EmpGender::None)
+Employee::Employee(Utils::EmpType empTypeParam) : mEmployeeType(empTypeParam), mEmployeeStatus(Utils::EmpStatus::ACTIVE), mGender(Utils::EmpGender::None)
 {
     // Randomly generate employee type and Name
     mName = mFirstNames[rand() % 10] + " " + mLastNames[rand() % 10];
@@ -26,7 +26,7 @@ void Employee::setRandomDOB(void)
     mDOB += std::to_string(std::stoi(sTodayDate.substr(6, 4)) - 20 - (rand() % 40));
 }
 
-Employee::Employee(EmpType empTypeParam, EmpStatus empStatusParam) : mEmployeeType(empTypeParam), mEmployeeStatus(empStatusParam)
+Employee::Employee(Utils::EmpType empTypeParam, Utils::EmpStatus empStatusParam) : mEmployeeType(empTypeParam), mEmployeeStatus(empStatusParam)
 {
     std::cin >> this;
     // id should be XYZ + mMemberNumbers + EmployeeType
@@ -40,14 +40,14 @@ Employee::~Employee()
 
 void Employee::setRandomGender(void)
 {
-    mGender = static_cast<EmployeeIF::EmpGender>(rand() % 2);
+    mGender = static_cast<Utils::EmpGender>(rand() % 2);
 }
 
 void Employee::setDOLBasedOnDOJ(bool isDOJSetParam, std::string basedOnTodayDateParam)
 {
     if (isDOJSetParam == true)
     {
-        if (mDOJ.length() != 10 || mEmployeeType == EmpType::NONE || mEmployeeType == EmpType::FULLTIME)
+        if (mDOJ.length() != 10 || mEmployeeType == Utils::EmpType::NONE || mEmployeeType == Utils::EmpType::FULLTIME)
         {
             mDOL = "NA";
             mDOJ.length() != 10 ? std::cout << "DOJ is not set properly\n"
@@ -55,12 +55,12 @@ void Employee::setDOLBasedOnDOJ(bool isDOJSetParam, std::string basedOnTodayDate
                                 : std::cout << "";
             return;
         }
-        else if (mEmployeeType == EmpType::CONTRACTUAL)
+        else if (mEmployeeType == Utils::EmpType::CONTRACTUAL)
         {
             mDOL = mDOJ.substr(0, 6) + std::to_string(std::stoi(mDOJ.substr(6, 4)) + 1);
             return;
         }
-        else if (mEmployeeType == EmpType::INTERN)
+        else if (mEmployeeType == Utils::EmpType::INTERN)
         {
             int month = std::stoi(mDOJ.substr(3, 2));
             int year = std::stoi(mDOJ.substr(6, 4));
@@ -77,7 +77,7 @@ void Employee::setDOLBasedOnDOJ(bool isDOJSetParam, std::string basedOnTodayDate
     }
     else
     {
-        if (basedOnTodayDateParam.length() != 10 || mEmployeeType == EmpType::NONE || mEmployeeType == EmpType::FULLTIME)
+        if (basedOnTodayDateParam.length() != 10 || mEmployeeType == Utils::EmpType::NONE || mEmployeeType == Utils::EmpType::FULLTIME)
         {
             mDOL = "NA";
             basedOnTodayDateParam.length() != 10 ? std::cout << "DOJ is not set properly\n"
@@ -85,12 +85,12 @@ void Employee::setDOLBasedOnDOJ(bool isDOJSetParam, std::string basedOnTodayDate
                                                  : std::cout << "";
             return;
         }
-        else if (mEmployeeType == EmpType::CONTRACTUAL)
+        else if (mEmployeeType == Utils::EmpType::CONTRACTUAL)
         {
             mDOL = basedOnTodayDateParam.substr(0, 6) + std::to_string(std::stoi(basedOnTodayDateParam.substr(6, 4)) + 1);
             return;
         }
-        else if (mEmployeeType == EmpType::INTERN)
+        else if (mEmployeeType == Utils::EmpType::INTERN)
         {
             int month = std::stoi(basedOnTodayDateParam.substr(3, 2));
             int year = std::stoi(basedOnTodayDateParam.substr(6, 4));
@@ -106,19 +106,19 @@ void Employee::setDOLBasedOnDOJ(bool isDOJSetParam, std::string basedOnTodayDate
         }
     }
 }
-void Employee::setIDBasedOnMemberNumberAndType(EmpType &empTypeParam)
+void Employee::setIDBasedOnMemberNumberAndType(Utils::EmpType &empTypeParam)
 {
     mID = "XYZ" + std::to_string(mMemberNumbers++);
 
-    if (empTypeParam == EmpType::INTERN)
+    if (empTypeParam == Utils::EmpType::INTERN)
     {
         mID += "I";
     }
-    else if (empTypeParam == EmpType::FULLTIME)
+    else if (empTypeParam == Utils::EmpType::FULLTIME)
     {
         mID += "F";
     }
-    else if (empTypeParam == EmpType::CONTRACTUAL)
+    else if (empTypeParam == Utils::EmpType::CONTRACTUAL)
     {
         mID += "C";
     }
@@ -153,11 +153,11 @@ const std::string_view Employee::getID(void) const
 
 const std::string_view Employee::getGender(void) const
 {
-    if (mGender == EmployeeIF::Male)
+    if (mGender == Utils::Male)
     {
         return "Male";
     }
-    else if (mGender == EmployeeIF::Female)
+    else if (mGender == Utils::Female)
     {
         return "Female";
     }
@@ -167,7 +167,7 @@ const std::string_view Employee::getGender(void) const
     }
 }
 
-const EmployeeIF::EmpGender &Employee::getGenderType(void) const
+const Utils::EmpGender &Employee::getGenderType(void) const
 {
     return mGender;
 }
@@ -177,7 +177,7 @@ const std::string_view Employee::getDOB(void) const
     return mDOB;
 }
 
-void Employee::setEmployeeType(EmpType empTypeParam)
+void Employee::setEmployeeType(Utils::EmpType empTypeParam)
 {
     mEmployeeType = empTypeParam;
     changeIdwithEmpType();
@@ -186,7 +186,7 @@ void Employee::setEmployeeType(EmpType empTypeParam)
     setDOLBasedOnDOJ(false, sDate);
 }
 
-void Employee::setEmployeeStatus(EmpStatus empStatusParam)
+void Employee::setEmployeeStatus(Utils::EmpStatus empStatusParam)
 {
     mEmployeeStatus = empStatusParam;
 }
@@ -216,15 +216,15 @@ void Employee::pGetTodayDate(std::string &dateParam)
 void Employee::changeIdwithEmpType(void)
 {
     mID = mID.substr(0, mID.length() - 1); // Remove the last character
-    if (mEmployeeType == EmpType::INTERN)
+    if (mEmployeeType == Utils::EmpType::INTERN)
     {
         mID += "I";
     }
-    else if (mEmployeeType == EmpType::FULLTIME)
+    else if (mEmployeeType == Utils::EmpType::FULLTIME)
     {
         mID += "F";
     }
-    else if (mEmployeeType == EmpType::CONTRACTUAL)
+    else if (mEmployeeType == Utils::EmpType::CONTRACTUAL)
     {
         mID += "C";
     }
@@ -284,12 +284,12 @@ void Employee::addLeavesToAll(const uint8_t &leavesParam)
     return;
 }
 
-const Employee::EmpType Employee::getEmployeeType(void) const
+const Utils::EmpType Employee::getEmployeeType(void) const
 {
     return mEmployeeType;
 }
 
-const Employee::EmpStatus Employee::getEmployeeStatus(void) const
+const Utils::EmpStatus Employee::getEmployeeStatus(void) const
 {
     return mEmployeeStatus;
 }
@@ -297,7 +297,7 @@ const Employee::EmpStatus Employee::getEmployeeStatus(void) const
 void Employee::setRandomDoj(void)
 {
     // Randomly DOJ generation based on Employee type
-    if (mEmployeeType == EmpType::FULLTIME)
+    if (mEmployeeType == Utils::EmpType::FULLTIME)
     {
         mDOJ += std::to_string(rand() % 28 + 1);
         mDOJ.length() == 1 ? mDOJ = "0" + mDOJ + "-" : mDOJ += "-";
@@ -305,7 +305,7 @@ void Employee::setRandomDoj(void)
         mDOJ.length() == 4 ? mDOJ = mDOJ.substr(0, 3) + "0" + mDOJ.substr(3, 1) + "-" : mDOJ += "-";
         mDOJ += std::to_string(rand() % 10 + 2015);
     }
-    else if (mEmployeeType == EmpType::INTERN)
+    else if (mEmployeeType == Utils::EmpType::INTERN)
     {
         // Based on current date - 6 months randomly generate
         std::string sTodayDate;
@@ -322,7 +322,7 @@ void Employee::setRandomDoj(void)
         mDOJ += sMonth < 10 ? "0" + std::to_string(sMonth) + "-" : std::to_string(sMonth) + "-";
         mDOJ += std::to_string(sYear);
     }
-    else if (mEmployeeType == EmpType::CONTRACTUAL)
+    else if (mEmployeeType == Utils::EmpType::CONTRACTUAL)
     {
         // Based on current date - 6 months randomly generate
         std::string sTodayDate;
@@ -345,38 +345,38 @@ void Employee::setRandomDoj(void)
 std::ostream &operator<<(std::ostream &osParam, const Employee *empParam)
 {
     osParam << std::left
-            << "| " << std::setw(EmployeeIF::Name) << empParam->mName
-            << "| " << std::setw(EmployeeIF::Id) << empParam->mID
-            << "| " << std::setw(EmployeeIF::Gender) << empParam->getGender()
-            << "| " << std::setw(EmployeeIF::Dob) << empParam->mDOB
-            << "| " << std::setw(EmployeeIF::Doj) << empParam->mDOJ
-            << "| " << std::setw(EmployeeIF::Dol) << empParam->mDOL
-            << "| " << std::setw(EmployeeIF::Type);
+            << "| " << std::setw(Utils::Name) << empParam->mName
+            << "| " << std::setw(Utils::Id) << empParam->mID
+            << "| " << std::setw(Utils::Gender) << empParam->getGender()
+            << "| " << std::setw(Utils::Dob) << empParam->mDOB
+            << "| " << std::setw(Utils::Doj) << empParam->mDOJ
+            << "| " << std::setw(Utils::Dol) << empParam->mDOL
+            << "| " << std::setw(Utils::Type);
     switch (empParam->mEmployeeType)
     {
-    case EmployeeIF::EmpType::FULLTIME:
+    case Utils::EmpType::FULLTIME:
         osParam << "Full Time";
         break;
-    case EmployeeIF::EmpType::INTERN:
+    case Utils::EmpType::INTERN:
         osParam << "Intern";
         break;
-    case EmployeeIF::EmpType::CONTRACTUAL:
+    case Utils::EmpType::CONTRACTUAL:
         osParam << "Contractual";
         break;
     default:
         osParam << "None";
         break;
     }
-    osParam << "| " << std::setw(EmployeeIF::Status);
+    osParam << "| " << std::setw(Utils::Status);
     switch (empParam->mEmployeeStatus)
     {
-    case EmployeeIF::EmpStatus::ACTIVE:
+    case Utils::EmpStatus::ACTIVE:
         osParam << "Active";
         break;
-    case EmployeeIF::EmpStatus::INACTIVE:
+    case Utils::EmpStatus::INACTIVE:
         osParam << "Inactive";
         break;
-    case EmployeeIF::EmpStatus::RESIGNED:
+    case Utils::EmpStatus::RESIGNED:
         osParam << "Resigned";
         break;
     default:
@@ -384,14 +384,14 @@ std::ostream &operator<<(std::ostream &osParam, const Employee *empParam)
         break;
     }
 
-    if(empParam->getEmployeeStatus() == EmployeeIF::RESIGNED)
+    if(empParam->getEmployeeStatus() == Utils::RESIGNED)
     {
-        osParam << "| " << std::setw(EmployeeIF::Clg) << "--";
-        osParam << "| " << std::setw(EmployeeIF::Bnh) << "--";
-        osParam << "| " << std::setw(EmployeeIF::CLeaves) << "--";
-        osParam << "| " << std::setw(EmployeeIF::LevApp) << "--";
-        osParam << "| " << std::setw(EmployeeIF::Agncy) << "--";
-        osParam << std::setw(EmployeeIF::LeftMar) << " " << "|";
+        osParam << "| " << std::setw(Utils::Clg) << "--";
+        osParam << "| " << std::setw(Utils::Bnh) << "--";
+        osParam << "| " << std::setw(Utils::CLeaves) << "--";
+        osParam << "| " << std::setw(Utils::LevApp) << "--";
+        osParam << "| " << std::setw(Utils::Agncy) << "--";
+        osParam << std::setw(Utils::LeftMar) << " " << "|";
     }
     osParam.unsetf(std::ios::adjustfield);
     return osParam;
@@ -407,15 +407,15 @@ std::istream &operator>>(std::istream &isParam, Employee *empParam)
     std::cin >> sGender;
     if (empParam->validCheck(std::cin) == false)
     {
-        empParam->mGender = EmployeeIF::EmpGender::None;
+        empParam->mGender = Utils::EmpGender::None;
     }
     if (sGender == 'M' || sGender == 'm')
     {
-        empParam->mGender = EmployeeIF::EmpGender::Male;
+        empParam->mGender = Utils::EmpGender::Male;
     }
     else if (sGender == 'F' || sGender == 'f')
     {
-        empParam->mGender = EmployeeIF::EmpGender::Female;
+        empParam->mGender = Utils::EmpGender::Female;
     }
 
     std::cout << "Enter DOB (DD-MM-YYYY): ";

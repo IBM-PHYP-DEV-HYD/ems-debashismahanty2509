@@ -5,12 +5,12 @@
 
 size_t FullEmp::mSizeOfFullEmployee = 0;
 uint8_t FullEmp::mMaxLeaves = 22;
-FullEmp::FullEmp() : Employee(EmployeeIF::EmpType::FULLTIME), mCurrentLeaves(0), mLeaveApplied(0)
+FullEmp::FullEmp() : Employee(Utils::EmpType::FULLTIME), mCurrentLeaves(0), mLeaveApplied(0)
 {
     genericConstCall();
 }
 
-FullEmp::FullEmp(EmpStatus empStatusParam) : Employee(EmployeeIF::EmpType::FULLTIME, empStatusParam), mCurrentLeaves(0), mLeaveApplied(0)
+FullEmp::FullEmp(Utils::EmpStatus empStatusParam) : Employee(Utils::EmpType::FULLTIME, empStatusParam), mCurrentLeaves(0), mLeaveApplied(0)
 {
     genericConstCall();
 }
@@ -100,12 +100,12 @@ std::ostream& operator<<(std::ostream& osParam , const FullEmp* empParam)
 {
     osParam << static_cast<const Employee*>(empParam);
     osParam << std::left;
-    osParam << "| " << std::setw(EmployeeIF::Clg) << "--";
-    osParam << "| " << std::setw(EmployeeIF::Bnh) << "--";
-    osParam << "| " << std::setw(EmployeeIF::CLeaves) << (int)empParam->mCurrentLeaves;
-    osParam << "| " << std::setw(EmployeeIF::LevApp) << (int)empParam->mLeaveApplied;
-    osParam << "| " << std::setw(EmployeeIF::Agncy) << "--";
-    osParam << std::setw(EmployeeIF::LeftMar) << " " << "|";
+    osParam << "| " << std::setw(Utils::Clg) << "--";
+    osParam << "| " << std::setw(Utils::Bnh) << "--";
+    osParam << "| " << std::setw(Utils::CLeaves) << (int)empParam->mCurrentLeaves;
+    osParam << "| " << std::setw(Utils::LevApp) << (int)empParam->mLeaveApplied;
+    osParam << "| " << std::setw(Utils::Agncy) << "--";
+    osParam << std::setw(Utils::LeftMar) << " " << "|";
     osParam.unsetf(std::ios::adjustfield);
     return osParam;
 }
